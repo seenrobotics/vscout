@@ -11,5 +11,4 @@ To develop for seenrobotics, you will eventually need to become familiar with ou
 1. Our [Code of conduct](CODE_OF_CONDUCT.md), which stipulates explicitly that everyone must be gracious, respectful, and professional. This also documents our conflict resolution policy and encourages people to ask questions.
 2. Our [Values](docs/VALUES.md), which talks about what we care most about.
 3. [Tree hygiene](docs/TREE_HYGIENE.md), which covers how to land a PR, how to do code review, how to handle breaking changes, how to handle regressions, and how to handle post-commit test failures.
-4. [Issue hygiene](docs/ISSUE_HYGIENE.md), which covers our processes around triaging bugs, escalating high priority bugs, assigning bugs, and our GitHub labels and milestones.
-5. Our [Style guide](docs/STYLE_GUIDE.md), which includes advice for how to write your code..
+4. Our [Style guide](docs/STYLE_GUIDE.md), which includes advice for how to write your code..
