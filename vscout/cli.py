@@ -1,8 +1,10 @@
-import click
 import sys
+
+import click
 
 from misc import commands as misc
 from graph import commands as graph
+from server import commands as server
 
 
 def main():
@@ -20,6 +22,7 @@ def entry_point():
 
 
 entry_point.add_command(graph.graph)
+entry_point.add_command(server.server)
 
 if __name__ == "__main__":
     main()

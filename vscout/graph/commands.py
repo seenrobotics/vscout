@@ -1,3 +1,5 @@
+import sys
+
 import click
 
 
@@ -9,4 +11,9 @@ def graph(stat):
 
 @graph.command()
 def ls():
+    pass
+
+
+@graph.command()
+def save():
     pass
