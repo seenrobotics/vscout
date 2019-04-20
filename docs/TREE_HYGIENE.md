@@ -30,7 +30,11 @@ Assuming your environment has been configured correctly, follow these steps to s
 GitHub provides you with a link for submitting the pull request in the message output by git push.
 
 Please make sure all your patches have detailed commit messages explaining what the problem was and what the solution is.
-#TODO: EXPLAIN COMMIT MESSAGES
+
+## Commit Messages
+
+The repository's log of git history shows commits either by the first 50 characters or in more detail with each commit message. Going through the log should be similar to reading a story. In order to do this, our commit messages are specifically structured in order to aid those looking back at the commit history.
+We use the Conventional Commits specification to write our commit messages, which can be found [here](https://www.conventionalcommits.org/en/v1.0.0-beta.4/).
 
 ## Getting a code review
 
