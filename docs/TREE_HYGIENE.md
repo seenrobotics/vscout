@@ -6,12 +6,12 @@ The general process for submitting code to a seenrobotics repository is as follo
 
 1. Fork the repository on GitHub
 2. If there is not already an issue covering the work you are interested in doing, and if you think the work you are doing is likely to be a non-trivial effort (e.g. you are creating a new feature, or otherwise introducing a new command, or intending to make a potentially breaking change, or refactoring a library), then file a new bug to describe the issue you are addressing.
-3. If the work you are doing is likely to be a non-trivial effort (see above), then discuss your design on the issue. You may find it useful to create a Google Doc to solicit feedback. You may wish to e-mail the mailing list, or discuss the topic on the contributors [Gitter channel](https://gitter.im/seenrobotics/vscout-cli). The more buy-in you get from the rest of the team (especially the relevant leads), the easier the rest of the process will be. You can put the label "proposal" on your issue to indicate that you have a design up for discussion in the issue.
+3. If the work you are doing is likely to be a non-trivial effort (see above), then discuss your design on the issue. You may find it useful to create a Google Doc to solicit feedback. You may wish to discuss the topic on the contributors [Gitter channel](https://gitter.im/seenrobotics/vscout-cli). The more buy-in you get from the rest of the team (especially the relevant leads), the easier the rest of the process will be. You can put the label "proposal" on your issue to indicate that you have a design up for discussion in the issue.
 4. Create a branch on your GitHub fork of the repository, and implement your change.
 5. You must follow the guidelines described in the [Style guide](STYLE_GUIDE.md).
 6. Submit this branch as a PR to the relevant seenrobotics repository.
 7. Get your code reviewed (see below). You should probably reach out to the relevant expert(s) for the areas you touched and ask them to review your PR directly. GitHub sometimes recommends specific reviewers; if you're not sure who to ask, that's probably a good place to start.
-8. Make sure your PR passes all the pre-commit tests from Azure Piplelines.
+8. Make sure your PR passes all the pre-commit tests from Azure Pipelines.
 9. Once everything is green and you have an LGTM, land your patch.
 10. Watch the post-commit tests on the dashboard to make sure everything passes. If anything goes wrong, revert your patch and study the problem.
 
@@ -82,11 +82,11 @@ Avoid "Revert "Revert "Revert "Revert "Fix foo"""" commit messages
 Please limit yourself to one "Revert" per commit message, otherwise we won't have any idea what is actually landing. Is it putting us back to where we were before? Is it adding new code? Is it a controversial new feature that actually caused a regression before but is now fixed (we hope)?
 Only use "Revert" if you are actually returning us to a known-good state. When you later revert the revert, just land the PR afresh with the original commit message, possibly updated with the information since collected (and ideally, including a link to the original PR and to the revert PR so that people can follow the breadcrumbs later).
 
-# Handling breaking changes
+## Handling breaking changes
 
 In general, we want to avoid making changes to vscout that force developers and users to change in order to upgrade to new versions of the software. Sometimes, however, doing this is necessary for the greater good. In those cases, to make a change that will require developers to change their code:
 Send a message to  the [Gitter channel](https://gitter.im/seenrobotics/vscout-cli) to socialize your proposed change. The purpose of this message is to see if you can get consensus around your change from the vscout developers with repository access. You are not telling people that the change will happen, you are asking them for permission. The message should include the following:
-- A subject line that clearly summarizes the proposed change and sounds like it matters (so that people can spot these e-mails among the noise). Prefix the subject line with [Breaking Change].
+- A subject line that clearly summarizes the proposed change and sounds like it matters. Prefix the subject line with [Breaking Change].
 - A summary of each change you propose.
 - A brief justification for the change.
 - A link to the relevant issue, and any PRs you may have already posted relating to this change.
