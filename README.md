@@ -1,5 +1,7 @@
 # vscout-cli
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e2cbc5225de74a218ad0ab6f6af65f91)](https://www.codacy.com/app/seendsouza/vscout-cli?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=seenrobotics/vscout-cli&amp;utm_campaign=Badge_Grade)
+
 The vscout suite is a group of scouting software for robotics competitions like VRC and FIRST. The original idea stemmed from the want/need for statistics, rankings and graphs at large events where many good teams are left unseen or misjudged. This is especially useful with a large amount of scouts in alliance situations. The vscout-cli provides a way of interacting with a database containing all the collected data.
 
 ## Getting Started
