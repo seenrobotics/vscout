@@ -23,7 +23,7 @@ Linux
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, our style guide, how to write code for this repository, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING](https://vscout.readthedocs.io/en/latest/contributing/index.html) for details on our code of conduct, our style guide, how to write code for this repository, and the process for submitting pull requests to us.
 
 ## Authors
 
@@ -33,4 +33,4 @@ See also the list of [contributors](https://github.com/seenrobotics/vscout-cli/c
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
