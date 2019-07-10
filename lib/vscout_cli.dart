@@ -1,3 +1,3 @@
-int calculate() {
-  return 6 * 7;
-}
+library vscout_cli;
+
+export 'src/commands/commands.dart';
