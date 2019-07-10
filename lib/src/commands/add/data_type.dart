@@ -12,6 +12,7 @@ class DataTypeCommand extends Command {
   }
   @override
   run() async {
+    // TODO: Replace with actual command.
     if (argResults['verbose'] == true) {
       print('Added data type ${argResults.rest[0]}');
     }
