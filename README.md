@@ -1,5 +1,7 @@
 # vscout-cli
 
+[![Build Status](https://travis-ci.org/seenrobotics/vscout-cli.svg?branch=master)](https://travis-ci.org/seenrobotics/vscout-cli)
+
 The vscout suite is a group of scouting software for robotics competitions like VRC and FIRST. The original idea stemmed from the want/need for statistics, rankings and graphs at large events where many good teams are left unseen or misjudged. This is especially useful with a large amount of scouts in alliance situations. The vscout-cli provides a way of interacting with a database containing all the collected data.
 
 ## Getting Started
