@@ -1,8 +1,7 @@
 name: vscout_cli
 description: A sample command-line application.
-# version: 1.0.0
-# homepage: https://www.example.com
-# author: seendsouza <sdammobubbles@gmail.com>
+version: 0.0.1
+homepage: https://vscout.readthedocs.io
 
 environment:
   sdk: '>=2.4.0 <3.0.0'
