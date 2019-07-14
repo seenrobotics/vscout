@@ -33,22 +33,28 @@ class DatabaseHandler {
     this.store = this.db.getStore(storeName);
   }
 
-  Future getTeamEntry(String teamID) async {
-    
+  Future getMatches(properties) async {
+    List<Filter> filters = new List();
+    properties.forEach((k,v) => 
+      filters.add(Filter.matches(k,v))
+    );
+    print(filters);
+    var records =
+      (await this.store.findRecords(Finder(filter: Filter.and(filters))));
+    return records;
   }
 
-  Future addTeamEntry(String teamID) async {
+  Future addTeamEntry(String teamId) async {
     String result = "";
-    // Check for if entry already exists
-    var records =
-      (await this.store.findRecords(Finder(filter: Filter.matches("teamID", teamID))));
+    // Check if entry already exists
+    var records = await getMatches({'teamId' : teamId});
 
     if(records.isNotEmpty)
     {
       result += "Team Already Exists \n";
       result += records.toString();
     } else{
-      Record record = Record(store, {"teamID": teamID});
+      Record record = Record(store, {"teamId": teamId});
       try {
         record = await this.db.putRecord(record);
       } on FormatException

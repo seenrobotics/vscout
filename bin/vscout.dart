@@ -30,6 +30,7 @@ main(List<String> args) async {
   // but I can't think of anything better rn 
   
   runner..addCommand(AddCommand(databaseHandler));
+  runner..addCommand(GetCommand(databaseHandler));
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
