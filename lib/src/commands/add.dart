@@ -1,7 +1,7 @@
 import 'package:args/command_runner.dart';
 
 import 'add/data.dart';
-import 'add/type.dart';
+import 'add/type.dart
 
 class AddCommand extends Command {
   @override
