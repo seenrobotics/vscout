@@ -3,7 +3,10 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'dart:io';
-String dbPath = '../../../../database/vscout.db';
+import 'package:path/path.dart' as p;
+String dbPath = '/../database/vscout.db';
+var pathToDb = (dirname(Platform.script.toFilePath()).toString()+dbPath);
+
 
 
 class DatabaseHandler {
@@ -19,7 +22,7 @@ class DatabaseHandler {
 
   Future newDB() async {
     this.db = await databaseFactoryIo
-      .openDatabase( join(".dart_tool", "sembast", "example", dbPath));
+      .openDatabase(pathToDb);
     return this.db;
   }
 
