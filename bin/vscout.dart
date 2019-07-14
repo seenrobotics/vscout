@@ -4,11 +4,11 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
-
 import 'package:vscout_cli/vscout_cli.dart';
 
 // The exit code for a general error.
 int generalError = 1;
+DatabaseHandler databaseHandler = DatabaseHandler();
 
 main(List<String> args) async {
   var runner = CommandRunner(
@@ -19,7 +19,7 @@ main(List<String> args) async {
 
   runner.argParser.addFlag('verbose', negatable: false);
 
-  runner..addCommand(AddCommand());
+  runner..addCommand(AddCommand(databaseHandler));
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
