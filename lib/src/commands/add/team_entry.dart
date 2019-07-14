@@ -1,5 +1,4 @@
 import 'package:args/command_runner.dart';
-import 'package:vscout_cli/vscout_cli.dart';
 class TeamEntryCommand extends Command {
   @override
   String get name => 'team-entry';
