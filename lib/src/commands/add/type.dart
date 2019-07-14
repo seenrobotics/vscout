@@ -1,15 +1,16 @@
 import 'package:args/command_runner.dart';
 
-class DataTypeCommand extends Command {
+class TypeCommand extends Command {
   @override
   String get name => 'data-type';
 
   @override
   String get description => 'Add data types to the database';
 
-  DataTypeCommand() {
+  TypeCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
   }
+
   @override
   run() async {
     // TODO: Replace with actual command.

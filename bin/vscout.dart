@@ -20,6 +20,12 @@ main(List<String> args) async {
   runner.argParser.addFlag('verbose', negatable: false);
 
   runner..addCommand(AddCommand());
+  runner..addCommand(ConfigCommand());
+  runner..addCommand(FindCommand());
+  runner..addCommand(InitCommand());
+  runner..addCommand(LsCommand());
+  runner..addCommand(RmCommand());
+  runner..addCommand(ShowCommand());
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
