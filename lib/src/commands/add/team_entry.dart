@@ -12,6 +12,7 @@ class TeamEntryCommand extends Command {
   // String get usageFooter => 'This is usage';
 
    @override
+   // TODO: Add method to generate usage message based on command args 
   String get usage => ("$description\n\n" + 
 """Usage: vscout add team-entry [team-id]
 -h, --help            Print this usage information.

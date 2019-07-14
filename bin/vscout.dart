@@ -14,7 +14,9 @@ int generalError = 1;
 
 main(List<String> args) async {
   DatabaseHandler databaseHandler = DatabaseHandler();
+  // Create new database handler with empty constructor, 
   await databaseHandler.InitializeDb();
+  // Run all constructor functions in async function so stuff is defined
   var runner = CommandRunner(
       'vscout',
       'Robotics scouting software'

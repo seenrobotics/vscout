@@ -54,14 +54,13 @@ class DatabaseHandler {
       } on FormatException
       {
         return 'format error';
-        //idk what to do here
+        //TODO: throw and catch database errors, probably in a new method
       } catch(e)
       {
         return(e);
-        //idk what to do here either
+        // ^^^
       }
-      //It worked
-      result += ('It worked! \n \n');
+      result += ('Added new team entry \n \n');
       result += (record.toString());
     }
     return result;
