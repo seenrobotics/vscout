@@ -14,23 +14,31 @@ class DatabaseHandler {
   Store store;
 
   DatabaseHandler()  {
-    this.newDB();
-    //this code block isnt setting the database for some reason 
-    // I think its because futures don't work in the constructor
-    // Ill figure this out later
+    //InitializeDb();
+    // Constructors can't call async functions, proper initialization is done in InitializeDb
+  }
+  
+  InitializeDb() async{
+    this.db = await this.newDb();
+    this.SetStore('main');
+    return true;
   }
 
-  Future newDB() async {
+  Future newDb() async {
     this.db = await databaseFactoryIo
       .openDatabase(pathToDb);
     return this.db;
   }
+  SetStore(storeName) {
+    this.store = this.db.getStore(storeName);
+  }
+
+  Future getTeamEntry(String teamID) async {
+    
+  }
 
   Future addTeamEntry(String teamID) async {
     String result = "";
-    this.db = await this.newDB();
-    //If I just skip to this, it says database is null, even though DatabaseHandler ran already
-    this.store = this.db.getStore('teams');
     // Check for if entry already exists
     var records =
       (await this.store.findRecords(Finder(filter: Filter.matches("teamID", teamID))));

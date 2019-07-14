@@ -5,12 +5,16 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
 import 'package:vscout_cli/vscout_cli.dart';
+import 'dart:async';
 
 // The exit code for a general error.
 int generalError = 1;
-DatabaseHandler databaseHandler = DatabaseHandler();
+
+
 
 main(List<String> args) async {
+  DatabaseHandler databaseHandler = DatabaseHandler();
+  await databaseHandler.InitializeDb();
   var runner = CommandRunner(
       'vscout',
       'Robotics scouting software'

@@ -8,7 +8,7 @@ String dbPath = 'test.db';
 Future main() async {
   Database db = await databaseFactoryIo
       .openDatabase(join(".dart_tool", "sembast", "example", dbPath));
-  Store store = db.getStore("teams");
+  Store store = db.getStore("main");
   Record record = Record(store, {"name": "ugly"});
   record = await db.putRecord(record);
   record = await store.getRecord(record.key);
