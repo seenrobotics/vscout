@@ -1,7 +1,7 @@
 import 'package:args/command_runner.dart';
-
-import 'add/data_type.dart';
 import 'add/team_entry.dart';
+import 'add/data.dart';
+import 'add/type.dart';
 
 class AddCommand extends Command {
   @override
@@ -11,12 +11,11 @@ class AddCommand extends Command {
   String get description => 'Add data or data types to the database';
 
   AddCommand(database) {
-    addSubcommand(DataTypeCommand());
+    addSubcommand(DataCommand());
+    addSubcommand(TypeCommand());
     addSubcommand(TeamEntryCommand(database));
+    
   }
   @override
-  run() async {
-    var dataType = argResults.wasParsed('data-type');
-    print(dataType);
-  }
+  run() async {}
 }

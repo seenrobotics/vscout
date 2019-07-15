@@ -28,6 +28,12 @@ main(List<String> args) async {
 
   runner..addCommand(AddCommand(databaseHandler));
   runner..addCommand(GetCommand(databaseHandler));
+  runner..addCommand(ConfigCommand());
+  runner..addCommand(FindCommand());
+  runner..addCommand(InitCommand());
+  runner..addCommand(LsCommand());
+  runner..addCommand(RmCommand());
+  runner..addCommand(ShowCommand());
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
