@@ -1,6 +1,5 @@
 import 'package:args/command_runner.dart';
-
-import 'get/get_team.dart';
+import 'get/team.dart';
 
 class GetCommand extends Command {
   @override
