@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'dart:convert';
+import 'package:vscout_cli/includes.dart';
 
 class GetTeamCommand extends Command {
   @override
@@ -35,12 +36,11 @@ Run "vscout help" to see global options.""");
     String parse1 = parse0.replaceAll("\'", ('\"'));
     // String parse2 = parse1.replaceAll("{", ('{\"'));
     // String parse3 = parse2.replaceAll("}", ('\"}'));
-
     Map parse4 = json.decode(parse1);
-
     Map parse5 = Map<String, String>();
     parse4.forEach((k, v) => parse5[k.trim()] = v.trim());
     return parse5;
+    List<String> hello = ['asdf'] ;
   }
 
   @override

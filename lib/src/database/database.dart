@@ -39,16 +39,15 @@ class DatabaseHandler {
     return records;
   }
 
-  Future addTeamEntry(String teamId) async {
-    String result = "";
-    // Check if entry already exists
-    var records = await getMatches({'teamId': teamId});
+  Future addEntry(properties) async {
+    // Check of datatype
+    print(properties);
+    if(!(properties.containsKey('dataType')&&properties['dataType'].isNotEmpty&&properties['dataType'] is String)) {
+      return 'Error - Datatype not set or invalid';
+    }
 
-    if (records.isNotEmpty) {
-      result += "Team Already Exists \n";
-      result += records.toString();
-    } else {
-      Record record = Record(store, {"teamId": teamId});
+      String result = "";
+      Record record = Record(store, properties);
       try {
         record = await this.db.putRecord(record);
       } on FormatException {
@@ -60,7 +59,7 @@ class DatabaseHandler {
       }
       result += ('Added new team entry \n \n');
       result += (record.toString());
-    }
+    
     return result;
   }
 }
