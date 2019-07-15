@@ -3,7 +3,7 @@ import 'package:args/command_runner.dart';
 class DataTypeCommand extends Command {
   @override
   String get name => 'data-type';
-  
+
   @override
   String get description => 'Add data types to the database';
 

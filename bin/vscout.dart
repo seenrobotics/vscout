@@ -5,16 +5,13 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
 import 'package:vscout_cli/vscout_cli.dart';
-import 'dart:async';
 
 // The exit code for a general error.
 int generalError = 1;
 
-
-
 main(List<String> args) async {
   DatabaseHandler databaseHandler = DatabaseHandler();
-  // Create new database handler with empty constructor, 
+  // Create new database handler with empty constructor,
   await databaseHandler.InitializeDb();
   // Run all constructor functions in async function so stuff is defined
   var runner = CommandRunner(
@@ -25,10 +22,10 @@ main(List<String> args) async {
 
   runner.argParser.addFlag('verbose', negatable: false);
 
-  // Normally I would just declare databaseHandler as a global variable, but 
+  // Normally I would just declare databaseHandler as a global variable, but
   // Dart doesn't have global variables RIP so this is kinda a sketch solution
-  // but I can't think of anything better rn 
-  
+  // but I can't think of anything better rn
+
   runner..addCommand(AddCommand(databaseHandler));
   runner..addCommand(GetCommand(databaseHandler));
 

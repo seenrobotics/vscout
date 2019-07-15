@@ -3,6 +3,7 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'dart:io';
+
 String dbPath = 'test.db';
 
 Future main() async {
@@ -16,7 +17,7 @@ Future main() async {
       (await store.findRecords(Finder(filter: Filter.byKey(record.key)))).first;
   print(record);
   record = await store.getRecord(record.key);
-  
+
   var records =
       (await store.findRecords(Finder(filter: Filter.matches("name", "^ugl"))));
   print(records);

@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+
 class TeamEntryCommand extends Command {
   @override
   String get name => 'team-entry';
@@ -7,14 +8,14 @@ class TeamEntryCommand extends Command {
   String get description => 'Add team entry to database';
 
   var databaseHandler;
-  
+
   // @override
   // String get usageFooter => 'This is usage';
 
-   @override
-   // TODO: Add method to generate usage message based on command args 
-  String get usage => ("$description\n\n" + 
-"""Usage: vscout add team-entry [team-id]
+  @override
+  // TODO: Add method to generate usage message based on command args
+  String get usage => ("$description\n\n" +
+      """Usage: vscout add team-entry [team-id]
 -h, --help            Print this usage information.
     --[no-]verbose
 
