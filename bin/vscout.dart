@@ -10,10 +10,11 @@ import 'package:vscout_cli/vscout_cli.dart';
 int generalError = 1;
 
 main(List<String> args) async {
+  // Create a new database handler with empty constructor.
   DatabaseHandler databaseHandler = DatabaseHandler();
-  // Create new database handler with empty constructor,
+  // Run all constructor functions in async function to await database construction completion.
+  //  This is to prevent calls to an unfinished database object.
   await databaseHandler.InitializeDb();
-  // Run all constructor functions in async function so stuff is defined
   var runner = CommandRunner(
       'vscout',
       'Robotics scouting software'

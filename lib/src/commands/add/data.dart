@@ -9,9 +9,9 @@ class DataCommand extends Command {
   String get description => 'Add data to the database';
   var databaseHandler;
 
-  DataCommand(database) {
+  DataCommand(databaseHandler) {
     argParser..addFlag('verbose', defaultsTo: false);
-    this.database = database;
+    this.databaseHandler = databaseHandler;
   }
 
   @override

@@ -45,8 +45,6 @@ class DatabaseHandler {
     if(!(properties.containsKey('dataType')&&properties['dataType'].isNotEmpty&&properties['dataType'] is String)) {
       return 'Error - Datatype not set or invalid';
     }
-
-      String result = "";
       Record record = Record(store, properties);
       try {
         record = await this.db.putRecord(record);
@@ -57,8 +55,7 @@ class DatabaseHandler {
         return (e);
         // ^^^
       }
-      result += ('Added new team entry \n \n');
-      result += (record.toString());
+      String result = 'Added new team entry \n \n${record.toString()}';
     
     return result;
   }

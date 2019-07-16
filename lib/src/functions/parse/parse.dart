@@ -1,17 +1,16 @@
 import 'dart:convert';
 
   /// Makes cmd arguments JSON parsable
-  //  Turns [{asdf:asdf}] -> [{"asdf":"asdf"}]
-parseArgsJson(str) {
-    String parse0 = str;
-    String parse1 = parse0.replaceAll("\'", ('\"'));
-    // String parse2 = parse1.replaceAll("{", ('{\"'));
-    // String parse3 = parse2.replaceAll("}", ('\"}'));
-    Map parse4 = json.decode(parse1);
-    Map parse5 = Map<String, String>();
-    parse4.forEach((k, v) => parse5[k is String? k.trim() : k.toString()] = v is String ? v.trim() : v.toString());
-    
-    // print(parse5);
-    return parse5;
+  //  Turns [{'asdf':'asdf'}] -> [{"asdf":"asdf"}]
+parseArgsJson(String str) {
+//  Replace all single quotes ' with double quotes " so json.decode is able to read it. 
+    String quoteReplace = str.replaceAll("\'", ('\"'));
+//  Json decode
+    Map baseMap = json.decode(quoteReplace);
+// Kill trailing white space, convert inputs to string to allow for staticly typed DART methods
+// This makes life alot easier
+    Map result = Map<String, String>();
+    baseMap.forEach((k, v) => result[k is String? k.trim() : k.toString().trim()] = v is String ? v.trim() : v.toString().trim());
+    return result;
     
   }
