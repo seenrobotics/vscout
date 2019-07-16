@@ -29,25 +29,14 @@ Run "vscout help" to see global options.""");
     this.databaseHandler = database;
   }
 
-  /// Makes cmd arguments JSON parsable
-  //  Turns [{asdf:asdf}] -> [{"asdf":"asdf"}]
-  parseArgsJson(str) {
-    String parse0 = str;
-    String parse1 = parse0.replaceAll("\'", ('\"'));
-    // String parse2 = parse1.replaceAll("{", ('{\"'));
-    // String parse3 = parse2.replaceAll("}", ('\"}'));
-    Map parse4 = json.decode(parse1);
-    Map parse5 = Map<String, String>();
-    parse4.forEach((k, v) => parse5[k.trim()] = v.trim());
-    return parse5;
-    List<String> hello = ['asdf'] ;
-  }
+
+
 
   @override
   run() async {
     // TODO: Replace with actual command.
     print(argResults.rest[0]);
-    Map filters = this.parseArgsJson(argResults.rest[0]);
+    Map filters = parseArgsJson(argResults.rest[0]);
     // Map filters = json.decode(argResults.rest[0]);
     var results = await this.databaseHandler.getMatches(filters);
 
