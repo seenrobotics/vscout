@@ -2,12 +2,12 @@ import 'package:args/command_runner.dart';
 import 'dart:convert';
 import 'package:vscout_cli/includes.dart';
 
-class GetTeamCommand extends Command {
+class DataCommand extends Command {
   @override
-  String get name => 'team-entry';
+  String get name => 'data';
 
   @override
-  String get description => 'Add team entry to database';
+  String get description => 'Find data from database';
 
   var databaseHandler;
 
@@ -24,18 +24,13 @@ EG: vscout get team-entry {'teamId' : '2381'}
 
 Run "vscout help" to see global options.""");
 
-  GetTeamCommand(database) {
+  DataCommand(databaseHandler) {
     argParser..addFlag('verbose', defaultsTo: false);
-    this.databaseHandler = database;
+    this.databaseHandler = databaseHandler;
   }
-
-
-
 
   @override
   run() async {
-    // TODO: Replace with actual command.
-    print(argResults.rest[0]);
     Map filters = parseArgsJson(argResults.rest[0]);
     // Map filters = json.decode(argResults.rest[0]);
     var results = await this.databaseHandler.getMatches(filters);
