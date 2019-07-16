@@ -28,9 +28,8 @@ main(List<String> args) async {
   // but I can't think of anything better rn
 
   runner..addCommand(AddCommand(databaseHandler));
-  runner..addCommand(GetCommand(databaseHandler));
+  runner..addCommand(FindCommand(databaseHandler));
   runner..addCommand(ConfigCommand());
-  runner..addCommand(FindCommand());
   runner..addCommand(InitCommand());
   runner..addCommand(LsCommand());
   runner..addCommand(RmCommand());

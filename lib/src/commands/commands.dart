@@ -1,7 +1,7 @@
 library vscout_cli.commands;
 
 export 'add.dart';
-export 'get.dart';
+export 'find.dart';
 export 'config.dart';
 export 'find.dart';
 export 'init.dart';
