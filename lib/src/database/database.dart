@@ -2,6 +2,7 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 
 String dbPath = '/../database/vscout.db';
 var pathToDb = (dirname(Platform.script.toFilePath()).toString() + dbPath);
@@ -39,13 +40,16 @@ class DatabaseHandler {
     return records;
   }
 
-  Future addEntry(properties) async {
-    // Check of datatype
-    print(properties);
-    if(!(properties.containsKey('dataType')&&properties['dataType'].isNotEmpty&&properties['dataType'] is String)) {
-      return 'Error - Datatype not set or invalid';
-    }
-      Record record = Record(store, properties);
+  Future addEntry(entry) async {
+  /// Adds Map entry into database
+    var uuid = new Uuid();
+    // Get current time to add to entry
+    var now = new DateTime.now().millisecondsSinceEpoch.toString();
+    entry['time'] = now;
+    print(entry); 
+    // Randomly Generate a UUID for the key to avoid collisions in distrubuted DB
+      String key = uuid.v4();
+      Record record = Record(store, entry, key);
       try {
         record = await this.db.putRecord(record);
       } on FormatException {
@@ -55,7 +59,7 @@ class DatabaseHandler {
         return (e);
         // ^^^
       }
-      String result = 'Added new team entry \n \n${record.toString()}';
+      String result = 'Added new entry \n \n${record.toString()}';
     
     return result;
   }

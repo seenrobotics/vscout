@@ -34,6 +34,7 @@ main(List<String> args) async {
   runner..addCommand(LsCommand());
   runner..addCommand(RmCommand());
   runner..addCommand(ShowCommand());
+  runner..addCommand(UpdateCommand(databaseHandler));
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
