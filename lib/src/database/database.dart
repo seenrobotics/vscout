@@ -13,8 +13,7 @@ class DatabaseHandler {
   Store store;
 
   DatabaseHandler() {
-    //InitializeDb();
-    // Constructors can't call async functions, proper initialization is done in InitializeDb
+    // Constructors can't call async functions, proper initialization is done in InitializeDb.
   }
 
   InitializeDb() async {
@@ -42,13 +41,13 @@ class DatabaseHandler {
   }
 
   Future addEntry(entry) async {
-  /// Adds Map entry into database
+  /// Adds Map entry into database.
     var uuid = new Uuid();
     // Get current time to add to entry
     var now = new DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = now;
     print(entry); 
-    // Randomly Generate a UUID for the key to avoid collisions in distrubuted DB
+    // Randomly Generate a UUID for the key to avoid collisions in distrubuted DB.
       String key = uuid.v4();
       Record record = Record(store, entry, key);
       try {
@@ -56,9 +55,6 @@ class DatabaseHandler {
       } on FormatException {
         return 'Format Exception On Database Entry';
         //TODO: throw and catch database errors, probably in a new method
-      } catch (exception) {
-        return (exception);
-        // ^^^
       }
       String result = 'Added new entry \n \n${record.toString()}';
     

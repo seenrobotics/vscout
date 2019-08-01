@@ -10,17 +10,6 @@ class DataCommand extends Command {
 
   var databaseHandler;
 
-
-  @override
-  String get usage => ("$description\n\n" +
-      """Usage: vscout get team-entry [{Parameters : Values}]
--h, --help            Print this usage information.
-    --[no-]verbose
-
-EG: vscout get team-entry {'teamId' : '2381'}
-
-Run "vscout help" to see global options.""");
-
   DataCommand(databaseHandler) {
     argParser..addFlag('verbose', defaultsTo: false);
     this.databaseHandler = databaseHandler;
@@ -29,14 +18,8 @@ Run "vscout help" to see global options.""");
   @override
   run() async {
     Map filters = parseArgsJson(argResults.rest[0]);
-    // Map filters = json.decode(argResults.rest[0]);
     var results = await this.databaseHandler.getMatches(filters);
-    
     print(filters);
     print(results);
-    // var result = await databaseHandler.addTeamEntry(team);
-    if (argResults['verbose'] == true) {
-      // print(result);
-    }
   }
 }

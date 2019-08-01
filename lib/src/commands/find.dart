@@ -13,7 +13,6 @@ class FindCommand extends Command {
   }
   @override
   run() async {
-    // var dataType = argResults.wasParsed('data-type');
-    // print(dataType);
+    ///TODO: Add functionality
   }
 }
