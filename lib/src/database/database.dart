@@ -41,16 +41,16 @@ class DatabaseHandler {
   }
 
   Future addEntry(entry) async {
-  /// Adds Map entry into database.
+    /// Adds Map entry into database.
     var uuid = new Uuid();
     // Get current time to add to entry
     var now = new DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = now;
-    print(entry); 
+    print(entry);
     // Randomly generate a UUID for the key to avoid collisions in distrubuted Db.
-      String key = uuid.v4();
-      Record record = Record(store, entry, key);
-      record = await this.db.putRecord(record);
-      return 'Added new entry \n \n${record.toString()}';
+    String key = uuid.v4();
+    Record record = Record(store, entry, key);
+    record = await this.db.putRecord(record);
+    return 'Added new entry \n \n${record.toString()}';
   }
 }

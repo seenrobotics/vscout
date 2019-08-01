@@ -13,7 +13,6 @@ class UpdateCommand extends Command {
   UpdateCommand(databaseHandler) {
     addSubcommand(DataCommand(databaseHandler));
     addSubcommand(TypeCommand());
-    
   }
   @override
   run() async {}

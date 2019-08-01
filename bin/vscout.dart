@@ -23,8 +23,6 @@ main(List<String> args) async {
 
   runner.argParser.addFlag('verbose', negatable: false);
 
-
-
   runner..addCommand(AddCommand(databaseHandler));
   runner..addCommand(FindCommand(databaseHandler));
   runner..addCommand(ConfigCommand());
