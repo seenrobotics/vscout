@@ -13,7 +13,7 @@ class DatabaseHandler {
   Store store;
 
   DatabaseHandler() {
-    // Constructors can't call async functions, proper initialization is done in InitializeDb.
+    // Constructors can't call async functions, proper initialization is done in [InitializeDb()].
   }
 
   InitializeDb() async {
@@ -47,7 +47,7 @@ class DatabaseHandler {
     var now = new DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = now;
     print(entry); 
-    // Randomly Generate a UUID for the key to avoid collisions in distrubuted DB.
+    // Randomly generate a UUID for the key to avoid collisions in distrubuted Db.
       String key = uuid.v4();
       Record record = Record(store, entry, key);
       record = await this.db.putRecord(record);
