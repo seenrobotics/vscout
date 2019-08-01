@@ -1,3 +1,3 @@
-library vscout_cli.functions;
+library vscout_cli.utils;
 import 'dart:convert';
 export 'parse/parse.dart';

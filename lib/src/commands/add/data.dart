@@ -1,10 +1,8 @@
 import 'package:args/command_runner.dart';
-import 'package:vscout_cli/includes.dart';
-import 'package:vscout_cli/src/database/database.dart';
+import '../../utils/utils.dart';
 class DataCommand extends Command {
   @override
   String get name => 'data';
-  var database;
   @override
   String get description => 'Add data to the database';
   var databaseHandler;
