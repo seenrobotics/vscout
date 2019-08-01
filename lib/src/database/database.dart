@@ -50,14 +50,7 @@ class DatabaseHandler {
     // Randomly Generate a UUID for the key to avoid collisions in distrubuted DB.
       String key = uuid.v4();
       Record record = Record(store, entry, key);
-      try {
-        record = await this.db.putRecord(record);
-      } on FormatException {
-        return 'Format Exception On Database Entry';
-        //TODO: throw and catch database errors, probably in a new method
-      }
-      String result = 'Added new entry \n \n${record.toString()}';
-    
-    return result;
+      record = await this.db.putRecord(record);
+      return 'Added new entry \n \n${record.toString()}';
   }
 }
