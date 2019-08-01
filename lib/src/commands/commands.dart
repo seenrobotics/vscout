@@ -8,3 +8,4 @@ export 'init.dart';
 export 'ls.dart';
 export 'rm.dart';
 export 'show.dart';
+export 'update.dart';

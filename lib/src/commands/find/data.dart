@@ -1,6 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'dart:convert';
-import 'package:vscout_cli/includes.dart';
+import '../../utils/utils.dart';
 
 class DataCommand extends Command {
   @override
@@ -11,8 +10,6 @@ class DataCommand extends Command {
 
   var databaseHandler;
 
-  // @override
-  // String get usageFooter => 'This is usage';
 
   @override
   String get usage => ("$description\n\n" +
@@ -34,7 +31,7 @@ Run "vscout help" to see global options.""");
     Map filters = parseArgsJson(argResults.rest[0]);
     // Map filters = json.decode(argResults.rest[0]);
     var results = await this.databaseHandler.getMatches(filters);
-
+    
     print(filters);
     print(results);
     // var result = await databaseHandler.addTeamEntry(team);

@@ -23,9 +23,7 @@ main(List<String> args) async {
 
   runner.argParser.addFlag('verbose', negatable: false);
 
-  // Normally I would just declare databaseHandler as a global variable, but
-  // Dart doesn't have global variables RIP so this is kinda a sketch solution
-  // but I can't think of anything better rn
+
 
   runner..addCommand(AddCommand(databaseHandler));
   runner..addCommand(FindCommand(databaseHandler));
@@ -34,6 +32,7 @@ main(List<String> args) async {
   runner..addCommand(LsCommand());
   runner..addCommand(RmCommand());
   runner..addCommand(ShowCommand());
+  runner..addCommand(UpdateCommand(databaseHandler));
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
