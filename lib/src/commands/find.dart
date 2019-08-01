@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+import 'find/data.dart';
 
 class FindCommand extends Command {
   @override
@@ -7,7 +8,11 @@ class FindCommand extends Command {
   @override
   String get description => 'Find data in database';
 
-  FindCommand();
+  FindCommand(databaseHandler) {
+    addSubcommand(DataCommand(databaseHandler));
+  }
   @override
-  run() async {}
+  run() async {
+    ///TODO: Add functionality
+  }
 }

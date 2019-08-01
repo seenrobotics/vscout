@@ -4,8 +4,10 @@ import '../../utils/utils.dart';
 class DataCommand extends Command {
   @override
   String get name => 'data';
+
   @override
-  String get description => 'Add data to the database';
+  String get description => 'Find data from database';
+
   var databaseHandler;
 
   DataCommand(databaseHandler) {
@@ -15,12 +17,9 @@ class DataCommand extends Command {
 
   @override
   run() async {
-    // TODO: Replace with actual command.
-    Map properties = parseArgsJson(argResults.rest[0]);
-    print(properties);
-    var result = await this.databaseHandler.addEntry(properties);
-    if (argResults['verbose'] == true) {
-      print(result);
-    }
+    Map filters = parseArgsJson(argResults.rest[0]);
+    var results = await this.databaseHandler.getMatches(filters);
+    print(filters);
+    print(results);
   }
 }

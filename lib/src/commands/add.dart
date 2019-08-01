@@ -10,8 +10,8 @@ class AddCommand extends Command {
   @override
   String get description => 'Add data or data types to the database';
 
-  AddCommand() {
-    addSubcommand(DataCommand());
+  AddCommand(databaseHandler) {
+    addSubcommand(DataCommand(databaseHandler));
     addSubcommand(TypeCommand());
   }
   @override
