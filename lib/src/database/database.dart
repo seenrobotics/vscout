@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
-import 'dart:io';
 import 'package:uuid/uuid.dart';
 
 String dbPath = '/../database/vscout.db';
@@ -53,10 +54,10 @@ class DatabaseHandler {
       try {
         record = await this.db.putRecord(record);
       } on FormatException {
-        return 'format error';
+        return 'Format Exception On Database Entry';
         //TODO: throw and catch database errors, probably in a new method
-      } catch (e) {
-        return (e);
+      } catch (exception) {
+        return (exception);
         // ^^^
       }
       String result = 'Added new entry \n \n${record.toString()}';
