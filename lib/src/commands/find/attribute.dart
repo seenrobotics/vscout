@@ -1,20 +1,21 @@
 import 'package:args/command_runner.dart';
 
-class DataTypeCommand extends Command {
+class AttributeCommand extends Command {
   @override
-  String get name => 'data-type';
+  String get name => 'attribute';
 
   @override
-  String get description => 'Add data types to the database';
+  String get description => 'Find attribute in the database';
 
   DataTypeCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
   }
+
   @override
   run() async {
     // TODO: Replace with actual command.
     if (argResults['verbose'] == true) {
-      print('Added data type ${argResults.rest[0]}');
+      print('Found attribute ${argResults.rest[0]}');
     }
   }
 }
