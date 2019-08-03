@@ -2,6 +2,7 @@ import 'package:args/command_runner.dart';
 
 import 'add/data.dart';
 import 'add/type.dart';
+import 'add/file.dart';
 
 class AddCommand extends Command {
   @override
@@ -13,6 +14,7 @@ class AddCommand extends Command {
   AddCommand(databaseHandler) {
     addSubcommand(DataCommand(databaseHandler));
     addSubcommand(TypeCommand());
+    addSubcommand(FileCommand(databaseHandler));
   }
   @override
   run() async {}
