@@ -4,7 +4,6 @@ import 'add/data.dart';
 import 'add/file.dart';
 import 'add/type.dart';
 
-
 class AddCommand extends Command {
   @override
   String get name => 'add';
