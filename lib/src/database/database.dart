@@ -46,7 +46,6 @@ class DatabaseHandler {
     // Get current time to add to entry
     var now = new DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = now;
-
     // Randomly generate a UUID for the key to avoid collisions in distrubuted Db.
     String key = uuid.v4();
     Record record = Record(store, entry, key);

@@ -18,8 +18,8 @@ Linux
 
 ## Built With
 
-* [Click](https://github.com/pallets/click/) - highly configurable package for building beautiful command line interfaces
-* [PostgreSQL](https://www.postgresql.org/) - advanced, reliable and robust object-relational database
+* [Dart](https://dart.dev/) - a client-optimized language for fast apps on any platform 
+* [Sembast](https://pub.dev/packages/sembast) - yet another NoSQL persistent store database solution for single process io applications
 
 ## Contributing
 
