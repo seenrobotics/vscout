@@ -1,11 +1,11 @@
 import 'package:args/command_runner.dart';
 
-class TypeCommand extends Command {
+class AttributeCommand extends Command {
   @override
-  String get name => 'data-type';
+  String get name => 'attribute';
 
   @override
-  String get description => 'Add data types to the database';
+  String get description => 'Add attribute to the database';
 
   TypeCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
@@ -15,7 +15,7 @@ class TypeCommand extends Command {
   run() async {
     // TODO: Replace with actual command.
     if (argResults['verbose'] == true) {
-      print('Added data type ${argResults.rest[0]}');
+      print('Added attribute ${argResults.rest[0]}');
     }
   }
 }
