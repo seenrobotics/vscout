@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+
 import '../../utils/utils.dart';
 
 class DataCommand extends Command {
@@ -17,9 +18,10 @@ class DataCommand extends Command {
   run() async {
     // TODO: Replace with actual command.
     Map properties = parseArgsJson(argResults.rest[0]);
-    print(properties);
+    print('Added new entry \n \n');
     var result = await this.databaseHandler.addEntry(properties);
     if (argResults['verbose'] == true) {
+      print(properties);
       print(result);
     }
   }

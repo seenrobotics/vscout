@@ -1,7 +1,8 @@
 import 'package:args/command_runner.dart';
 
-import 'add/data.dart';
 import 'add/attribute.dart';
+import 'add/data.dart';
+import 'add/file.dart';
 
 class AddCommand extends Command {
   @override
@@ -11,8 +12,9 @@ class AddCommand extends Command {
   String get description => 'Add data or attribute to the database';
 
   AddCommand(databaseHandler) {
-    addSubcommand(DataCommand(databaseHandler));
     addSubcommand(AttributeCommand());
+    addSubcommand(DataCommand(databaseHandler));
+    addSubcommand(FileCommand(databaseHandler));
   }
   @override
   run() async {}
