@@ -19,9 +19,9 @@ class FileCommand extends Command {
     this.results = await addDataModel.findFileData(argResults.rest[0]);
     print('Entries found \n \n');
     if (argResults['verbose'] == true) {
-      print(this.results.toString() + '\n \n');
+      print('${this.results.toString()} \n \n');
     } else {
-      print(this.results['data'].toString() + '\n \n');
+      print("${this.results['data'].toString()}+ \n \n");
     }
     return;
   }

@@ -14,6 +14,7 @@ class DatabaseHandler {
   String relativeDatabasePath;
   String absoluteDatabasePath;
   Map resultFields;
+  HttpStatus statusCodes;
 
   static final DatabaseHandler _singleton = new DatabaseHandler._internal();
 
@@ -28,12 +29,11 @@ class DatabaseHandler {
 
   InitializeDb() async {
     this.resultFields = new Map();
-    this.resultFields['status'] = null;
-    this.resultFields['data'] = null;
+    this.resultFields['status'] = HttpStatus.processing;
     //Set the path to the database
     this.relativeDatabasePath = '/../database/vscout.db';
-    this.absoluteDatabasePath = (dirname(Platform.script.toFilePath()).toString() +
-        this.relativeDatabasePath);
+    this.absoluteDatabasePath =
+        ("${dirname(Platform.script.toFilePath()).toString()}${this.relativeDatabasePath}");
     this.db = await this.openDb();
     this.SetStore('main');
     return true;
@@ -66,7 +66,7 @@ class DatabaseHandler {
     var records =
         (await this.store.findRecords(Finder(filter: Filter.and(filters))));
     results['data'] = records;
-    results['status'] = 200;
+    results['status'] = HttpStatus.ok;
     return results;
   }
 
@@ -82,7 +82,7 @@ class DatabaseHandler {
     Record record = Record(store, entry, key);
     record = await this.db.putRecord(record);
     results['data'] = record;
-    results['status'] = 200;
+    results['status'] = HttpStatus.ok;
     return results;
   }
 }
