@@ -18,8 +18,9 @@ class DatabaseHandler {
   InitializeDb() async {
     //Set the path to the database.
     this.relativeDatabasePath = '/../database/vscout.db';
-    this.absoluteDatabasePath = (dirname(Platform.script.toFilePath()).toString() +
-        this.relativeDatabasePath);
+    this.absoluteDatabasePath =
+        (dirname(Platform.script.toFilePath()).toString() +
+            this.relativeDatabasePath);
     this.db = await this.openDb();
     this.SetStore('main');
     return true;
