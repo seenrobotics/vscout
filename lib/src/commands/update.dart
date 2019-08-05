@@ -10,8 +10,8 @@ class UpdateCommand extends Command {
   @override
   String get description => 'Update data or attributes from the database';
 
-  UpdateCommand(databaseHandler) {
-    addSubcommand(DataCommand(databaseHandler));
+  UpdateCommand() {
+    addSubcommand(DataCommand());
     addSubcommand(AttributeCommand());
   }
   @override

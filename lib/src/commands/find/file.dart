@@ -2,23 +2,22 @@ import 'package:args/command_runner.dart';
 
 import '../../models/find/data.dart';
 
-class DataCommand extends Command {
+class FileCommand extends Command {
   @override
-  String get name => 'data';
+  String get name => 'file';
   @override
-  String get description => 'Find data to the database';
-  var databaseHandler;
+  String get description => 'Find entries in the database through JSON File';
   Map results;
 
-  DataCommand() {
+  FileCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
   }
 
   @override
   run() async {
-    final FindDataModel findDataModel = new FindDataModel();
-    this.results = await findDataModel.findStringData(argResults.rest[0]);
-    print('Found entries: \n \n');
+    final FindDataModel addDataModel = new FindDataModel();
+    this.results = await addDataModel.findFileData(argResults.rest[0]);
+    print('Entries found \n \n');
     if (argResults['verbose'] == true) {
       print(this.results.toString() + '\n \n');
     } else {

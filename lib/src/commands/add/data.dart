@@ -1,6 +1,6 @@
 import 'package:args/command_runner.dart';
 
-import '../../utils/utils.dart';
+import '../../models/add/data.dart';
 
 class DataCommand extends Command {
   @override
@@ -8,21 +8,22 @@ class DataCommand extends Command {
   @override
   String get description => 'Add data to the database';
   var databaseHandler;
+  Map results;
 
-  DataCommand(databaseHandler) {
+  DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
-    this.databaseHandler = databaseHandler;
   }
 
   @override
   run() async {
-    // TODO: Replace with actual command.
-    Map properties = parseArgsJson(argResults.rest[0]);
+    final AddDataModel addDataModel = new AddDataModel();
+    this.results = await addDataModel.addStringData(argResults.rest[0]);
     print('Added new entry \n \n');
-    var result = await this.databaseHandler.addEntry(properties);
     if (argResults['verbose'] == true) {
-      print(properties);
-      print(result);
+      print(this.results.toString() + '\n \n');
+    } else {
+      print(this.results['data'].toString() + '\n \n');
     }
+    return;
   }
 }
