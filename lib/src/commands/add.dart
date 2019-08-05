@@ -11,10 +11,10 @@ class AddCommand extends Command {
   @override
   String get description => 'Add data or attribute to the database';
 
-  AddCommand(databaseHandler) {
+  AddCommand() {
     addSubcommand(AttributeCommand());
-    addSubcommand(DataCommand(databaseHandler));
-    addSubcommand(FileCommand(databaseHandler));
+    addSubcommand(DataCommand());
+    addSubcommand(FileCommand());
   }
   @override
   run() async {}
