@@ -1,25 +1,29 @@
 import 'package:args/command_runner.dart';
-import '../../utils/utils.dart';
+
+import '../../models/find/data.dart';
 
 class DataCommand extends Command {
   @override
   String get name => 'data';
-
   @override
-  String get description => 'Find data from database';
-
+  String get description => 'Find data to the database';
   var databaseHandler;
+  Map results;
 
-  DataCommand(databaseHandler) {
+  DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
-    this.databaseHandler = databaseHandler;
   }
 
   @override
   run() async {
-    Map filters = parseArgsJson(argResults.rest[0]);
-    var results = await this.databaseHandler.getMatches(filters);
-    print(filters);
-    print(results);
+    final FindDataModel findDataModel = new FindDataModel();
+    this.results = await findDataModel.findStringData(argResults.rest[0]);
+    print('Found entries: \n \n');
+    if (argResults['verbose'] == true) {
+      print('${this.results.toString()} \n \n');
+    } else {
+      print("${this.results['data'].toString()}+ \n \n");
+    }
+    return;
   }
 }

@@ -1,12 +1,12 @@
 import 'package:args/command_runner.dart';
 
-import '../../models/add/data.dart';
+import '../../models/find/data.dart';
 
 class FileCommand extends Command {
   @override
   String get name => 'file';
   @override
-  String get description => 'Add entry to the database through JSON File';
+  String get description => 'Find entries in the database through JSON File';
   Map results;
 
   FileCommand() {
@@ -15,9 +15,9 @@ class FileCommand extends Command {
 
   @override
   run() async {
-    final AddDataModel addDataModel = new AddDataModel();
-    this.results = await addDataModel.addFileData(argResults.rest[0]);
-    print('Added new entry \n \n');
+    final FindDataModel addDataModel = new FindDataModel();
+    this.results = await addDataModel.findFileData(argResults.rest[0]);
+    print('Entries found \n \n');
     if (argResults['verbose'] == true) {
       print('${this.results.toString()} \n \n');
     } else {
