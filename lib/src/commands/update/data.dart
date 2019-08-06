@@ -1,11 +1,14 @@
 import 'package:args/command_runner.dart';
-import '../../utils/utils.dart';
+
+import '../../models/update/data.dart';
 
 class DataCommand extends Command {
   @override
   String get name => 'data';
   @override
-  String get description => 'Update data to the database';
+  String get description => 'Find data to the database';
+  var databaseHandler;
+  Map results;
 
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
@@ -13,9 +16,15 @@ class DataCommand extends Command {
 
   @override
   run() async {
-    //TODO: Replace with actual command.
-    Map properties = parseArgsJson(argResults.rest[0]);
-    print(properties);
-    if (argResults['verbose'] == true) {}
+    final UpdateDataModel findDataModel = new UpdateDataModel();
+    this.results = await findDataModel.updateStringData(
+        argResults.rest[0], argResults.rest[1]);
+    print('Found entries: \n \n');
+    if (argResults['verbose'] == true) {
+      print(this.results.toString() + '\n \n');
+    } else {
+      print(this.results['data'].toString() + '\n \n');
+    }
+    return;
   }
 }

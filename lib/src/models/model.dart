@@ -5,5 +5,6 @@ class Model {
   Map result;
   Model() {
     this.databaseHandler = new DatabaseHandler();
+    this.result = new Map();
   }
 }
