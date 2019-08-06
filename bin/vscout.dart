@@ -23,14 +23,14 @@ main(List<String> args) async {
 
   runner.argParser.addFlag('verbose', negatable: false);
 
-  runner..addCommand(AddCommand(databaseHandler));
-  runner..addCommand(FindCommand(databaseHandler));
+  runner..addCommand(AddCommand());
+  runner..addCommand(FindCommand());
   runner..addCommand(ConfigCommand());
   runner..addCommand(InitCommand());
   runner..addCommand(LsCommand());
   runner..addCommand(RmCommand());
   runner..addCommand(ShowCommand());
-  runner..addCommand(UpdateCommand(databaseHandler));
+  runner..addCommand(UpdateCommand());
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
