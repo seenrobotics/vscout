@@ -21,7 +21,7 @@ class FileCommand extends Command {
     if (argResults['verbose'] == true) {
       print('${this.results.toString()} \n \n');
     } else {
-      print("${this.results['data'].toString()}+ \n \n");
+      print("${this.results['data'].toString()} \n \n");
     }
     return;
   }
