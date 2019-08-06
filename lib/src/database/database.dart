@@ -1,3 +1,5 @@
+library vscout_cli.database;
+
 import 'dart:io';
 
 import 'package:sembast/sembast.dart';
@@ -5,25 +7,51 @@ import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
-String dbPath = '/../database/vscout.db';
-var pathToDb = (dirname(Platform.script.toFilePath()).toString() + dbPath);
-
 class DatabaseHandler {
   Database db;
   Store store;
+  File databaseFile;
+  String relativeDatabasePath;
+  String absoluteDatabasePath;
+  Map resultFields;
+  HttpStatus statusCodes;
 
-  DatabaseHandler() {
-    // Constructors can't call async functions, proper initialization is done in [InitializeDb()].
+  static final DatabaseHandler _singleton = new DatabaseHandler._internal();
+
+  factory DatabaseHandler() {
+    return _singleton;
+    // Constructors can't call async functions, actual initialization is done in [InitializeDb()].
+  }
+
+  DatabaseHandler._internal() {
+    //
   }
 
   InitializeDb() async {
-    this.db = await this.newDb();
+    this.resultFields = new Map();
+    this.resultFields['status'] = HttpStatus.processing;
+    //Set the path to the database
+    this.relativeDatabasePath = '/../database/vscout.db';
+    this.absoluteDatabasePath =
+        ("${dirname(Platform.script.toFilePath()).toString()}${this.relativeDatabasePath}");
+    this.db = await this.openDb();
     this.SetStore('main');
     return true;
   }
 
-  Future newDb() async {
-    this.db = await databaseFactoryIo.openDatabase(pathToDb);
+  Future createDatabaseFile() async {
+    return (await this.databaseFile.create() is File) ? true : false;
+  }
+
+  Future openDb() async {
+    //Check if database file exists and create it if not.
+    this.databaseFile = new File(this.absoluteDatabasePath);
+    bool databaseExists = await this.databaseFile.exists();
+    databaseExists = databaseExists ? true : await this.createDatabaseFile();
+    //Wait for database file to be created, proceed to open it.
+    this.db = databaseExists
+        ? await databaseFactoryIo.openDatabase(this.absoluteDatabasePath)
+        : false;
     return this.db;
   }
 
@@ -32,16 +60,19 @@ class DatabaseHandler {
   }
 
   Future getMatches(properties) async {
+    Map results = new Map.from(this.resultFields);
     List<Filter> filters = List();
     properties.forEach((k, v) => filters.add(Filter.matches(k, v)));
-    print(filters);
     var records =
         (await this.store.findRecords(Finder(filter: Filter.and(filters))));
-    return records;
+    results['data'] = records;
+    results['status'] = HttpStatus.ok;
+    return results;
   }
 
   Future addEntry(entry) async {
     /// Adds Map entry into database.
+    Map results = new Map.from(this.resultFields);
     var uuid = new Uuid();
     // Get current time to add to entry
     var now = new DateTime.now().millisecondsSinceEpoch.toString();
@@ -50,6 +81,8 @@ class DatabaseHandler {
     String key = uuid.v4();
     Record record = Record(store, entry, key);
     record = await this.db.putRecord(record);
-    return '${record.toString()}';
+    results['data'] = record;
+    results['status'] = HttpStatus.ok;
+    return results;
   }
 }

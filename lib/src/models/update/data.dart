@@ -6,16 +6,20 @@ class DataCommand extends Command {
   String get name => 'data';
   @override
   String get description => 'Update data to the database';
+  var databaseHandler;
 
-  DataCommand() {
+  DataCommand(databaseHandler) {
     argParser..addFlag('verbose', defaultsTo: false);
+    this.databaseHandler = databaseHandler;
   }
 
   @override
   run() async {
-    //TODO: Replace with actual command.
     Map properties = parseArgsJson(argResults.rest[0]);
     print(properties);
-    if (argResults['verbose'] == true) {}
+    var result = await this.databaseHandler.addEntry(properties);
+    if (argResults['verbose'] == true) {
+      print(result);
+    }
   }
 }
