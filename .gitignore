@@ -11,6 +11,12 @@ pubspec.lock
 # Conventional directory for build outputs
 build/
 
+# Files directory
+files/
+
+#Db directory
+db/
+
 # Directory created by dartdoc
 doc/api/
 #Ignore databases

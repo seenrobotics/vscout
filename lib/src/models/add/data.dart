@@ -25,9 +25,8 @@ class AddDataModel extends Model {
   addFileData(String relativeFilePath) async {
     String fileFolder = '/../files/';
     //  Tries to find file in [files] folder.
-    var absFilePath = (dirname(Platform.script.toFilePath()).toString() +
-        fileFolder +
-        relativeFilePath);
+    var absFilePath =
+        ("${dirname(Platform.script.toFilePath()).toString()}$fileFolder$relativeFilePath");
     final inputFile = new File(absFilePath);
     String fileContents;
     fileContents = await inputFile.readAsString();

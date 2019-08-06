@@ -19,8 +19,10 @@ class UpdateDataModel extends Model {
 
   Future updateMapData(Map searchParameters, Map updateData) async {
     //Call Database Handler search method.
+    //TODO: Make it not error when no results are found.
     Map searchResult =
         (await this.databaseHandler.findEntries(searchParameters));
+
     //Find entries to be updated.
     if (searchResult['status'] != HttpStatus.ok) {
       this.result = searchResult;

@@ -30,15 +30,13 @@ class DatabaseHandler {
 
   InitializeDb() async {
     this._resultFields = new Map();
-    this._resultFields['status'] = null;
-    this._resultFields['data'] = null;
+    this._resultFields['status'] = HttpStatus.processing;
     //Set the path to the database
     this.relativeDatabasePath = '/../database/vscout.db';
     this.absoluteDatabasePath =
-        (dirname(Platform.script.toFilePath()).toString() +
-            this.relativeDatabasePath);
+        ("${dirname(Platform.script.toFilePath()).toString()}${this.relativeDatabasePath}");
     this.database = await this.openDb();
-    this.SetStore('main');
+    await this.setStore();
 
     return true;
   }
@@ -59,8 +57,9 @@ class DatabaseHandler {
     return this.database;
   }
 
-  SetStore(storeName) {
+  Future setStore({storeName}) async {
     this.store = stringMapStoreFactory.store(storeName);
+    return this.store;
   }
 
   Future findEntries(properties) async {
@@ -76,7 +75,7 @@ class DatabaseHandler {
     });
 
     results['data'] = records;
-    results['status'] = 200;
+    results['status'] = HttpStatus.ok;
     return results;
   }
 
@@ -107,6 +106,7 @@ class DatabaseHandler {
       key = this.store.record(entryRecord).key;
     });
     results['data'] = key;
+    print(key);
     results['status'] = HttpStatus.ok;
     return results;
   }

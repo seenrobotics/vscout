@@ -21,9 +21,9 @@ class DataCommand extends Command {
         argResults.rest[0], argResults.rest[1]);
     print('Found entries: \n \n');
     if (argResults['verbose'] == true) {
-      print(this.results.toString() + '\n \n');
+      print('${this.results.toString()} \n \n');
     } else {
-      print(this.results['data'].toString() + '\n \n');
+      print("${this.results['data'].toString()} \n \n");
     }
     return;
   }
