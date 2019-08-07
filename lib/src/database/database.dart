@@ -8,13 +8,14 @@ import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 class DatabaseHandler {
-  Database db;
-  Store store;
+  Database database;
+  StoreRef store;
+
   File databaseFile;
   String relativeDatabasePath;
   String absoluteDatabasePath;
-  Map resultFields;
-  HttpStatus statusCodes;
+
+  Map _resultFields;
 
   static final DatabaseHandler _singleton = new DatabaseHandler._internal();
 
@@ -26,8 +27,8 @@ class DatabaseHandler {
   DatabaseHandler._internal() {}
 
   initializeDatabase() async {
-    this.resultFields = new Map();
-    this.resultFields['status'] = HttpStatus.processing;
+    this._resultFields = new Map();
+    this._resultFields['status'] = HttpStatus.processing;
     //Set the path to the database
     this.relativeDatabasePath = '/../database/vscout.db';
     this.absoluteDatabasePath =
@@ -36,7 +37,7 @@ class DatabaseHandler {
     if (!await this.openDb()) {
       return false;
     }
-    this.SetStore('main');
+    await this.setStore();
     return true;
   }
 
@@ -50,24 +51,31 @@ class DatabaseHandler {
   Future openDb() async {
     // Only open an existing database, else, catch error and return false.
     try {
-      this.db = await databaseFactoryIo.openDatabase(this.absoluteDatabasePath,
-          mode: DatabaseMode.existing);
+      this.database = await databaseFactoryIo
+          .openDatabase(this.absoluteDatabasePath, mode: DatabaseMode.existing);
     } on DatabaseException catch (e) {
       return false;
     }
     return true;
   }
 
-  SetStore(storeName) {
-    this.store = this.db.getStore(storeName);
+  Future setStore({storeName}) async {
+    this.store = stringMapStoreFactory.store(storeName);
+    return this.store;
   }
 
-  Future getMatches(properties) async {
-    Map results = new Map.from(this.resultFields);
+  Future findEntries(properties) async {
+    Map results = new Map.from(this._resultFields);
     List<Filter> filters = List();
     properties.forEach((k, v) => filters.add(Filter.matches(k, v)));
-    var records =
-        (await this.store.findRecords(Finder(filter: Filter.and(filters))));
+    var records;
+
+    await this.database.transaction((txn) async {
+      records = await this
+          .store
+          .findKeys(txn, finder: Finder(filter: Filter.and(filters)));
+    });
+
     results['data'] = records;
     results['status'] = HttpStatus.ok;
     return results;
@@ -75,16 +83,31 @@ class DatabaseHandler {
 
   Future addEntry(entry) async {
     /// Adds Map entry into database.
-    Map results = new Map.from(this.resultFields);
+    Map results = new Map.from(this._resultFields);
     var uuid = new Uuid();
     // Get current time to add to entry
     var now = new DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = now;
     // Randomly generate a UUID for the key to avoid collisions in distrubuted Db.
     String key = uuid.v4();
-    Record record = Record(store, entry, key);
-    record = await this.db.putRecord(record);
-    results['data'] = record;
+    await this.database.transaction((txn) async {
+      await this.store.record(key).put(txn, entry);
+      key = this.store.record(key).key;
+    });
+    results['data'] = key;
+    results['status'] = HttpStatus.ok;
+    return results;
+  }
+
+  Future updateEntry(String entryRecord, Map updateData) async {
+    /// Updates a single record in database.
+    Map results = new Map.from(this._resultFields);
+    var key;
+    await this.database.transaction((txn) async {
+      await this.store.record(entryRecord).update(txn, updateData);
+      key = this.store.record(entryRecord).key;
+    });
+    results['data'] = key;
     results['status'] = HttpStatus.ok;
     return results;
   }

@@ -11,5 +11,6 @@ class Model {
   Map result;
   Model() {
     this.databaseHandler = DatabaseHandler();
+    this.result = Map();
   }
 }

@@ -16,7 +16,7 @@ class FindDataModel extends Model {
   }
 
   findMapData(Map dataEntry) async {
-    this.result = await await this.databaseHandler.getMatches(dataEntry);
+    this.result = await await this.databaseHandler.findEntries(dataEntry);
     this.result['query'] = dataEntry.toString();
     this.result['queryType'] = 'FIND/DATA/MAP';
     return this.result;
