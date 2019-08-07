@@ -6,11 +6,10 @@ import 'package:path/path.dart';
 import '../utils/utils.dart';
 import '../database/database.dart';
 
-class Model {
+abstract class Model {
   DatabaseHandler databaseHandler;
-  Map result;
+  Map result = Map();
   Model() {
     this.databaseHandler = DatabaseHandler();
-    this.result = Map();
   }
 }
