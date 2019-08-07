@@ -10,11 +10,22 @@ import 'package:vscout_cli/vscout_cli.dart';
 int generalError = 1;
 
 main(List<String> args) async {
+  List<dynamic> commands = List();
   // Create a new database handler with empty constructor.
   DatabaseHandler databaseHandler = DatabaseHandler();
   // Run all constructor functions in async function to await database construction completion.
   //  This is to prevent calls to an unfinished database object.
-  await databaseHandler.InitializeDb();
+  // Add database related commands only if database exists, else only add [init] and [config].
+  if (await databaseHandler.initializeDatabase()) {
+    commands.add(AddCommand());
+    commands.add(FindCommand());
+    commands.add(LsCommand());
+    commands.add(RmCommand());
+    commands.add(ShowCommand());
+    commands.add(UpdateCommand());
+  }
+  commands.add(InitCommand());
+  commands.add(ConfigCommand());
   var runner = CommandRunner(
       'vscout',
       'Robotics scouting software'
@@ -22,15 +33,7 @@ main(List<String> args) async {
           'https://vscout.readthedocs.io');
 
   runner.argParser.addFlag('verbose', negatable: false);
-
-  runner..addCommand(AddCommand());
-  runner..addCommand(FindCommand());
-  runner..addCommand(ConfigCommand());
-  runner..addCommand(InitCommand());
-  runner..addCommand(LsCommand());
-  runner..addCommand(RmCommand());
-  runner..addCommand(ShowCommand());
-  runner..addCommand(UpdateCommand());
+  commands.forEach((command) => runner..addCommand(command));
 
   return await runner.run(args).catchError((exception, stackTrace) {
     if (exception is String) {
