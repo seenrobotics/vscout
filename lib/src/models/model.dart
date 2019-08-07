@@ -11,5 +11,6 @@ abstract class Model {
   Map result = Map();
   Model() {
     this.databaseHandler = DatabaseHandler();
+    this.result = Map();
   }
 }
