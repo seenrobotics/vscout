@@ -10,7 +10,7 @@ class Model {
   DatabaseHandler databaseHandler;
   Map result;
   Model() {
-    this.databaseHandler = new DatabaseHandler();
-    this.result = new Map();
+    this.databaseHandler = DatabaseHandler();
+    this.result = Map();
   }
 }

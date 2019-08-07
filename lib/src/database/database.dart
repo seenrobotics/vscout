@@ -24,37 +24,39 @@ class DatabaseHandler {
     // Constructors can't call async functions, actual initialization is done in [InitializeDb()].
   }
 
-  DatabaseHandler._internal() {
-    //
-  }
+  DatabaseHandler._internal() {}
 
-  InitializeDb() async {
+  initializeDatabase() async {
     this._resultFields = new Map();
     this._resultFields['status'] = HttpStatus.processing;
     //Set the path to the database
     this.relativeDatabasePath = '/../database/vscout.db';
     this.absoluteDatabasePath =
         ("${dirname(Platform.script.toFilePath()).toString()}${this.relativeDatabasePath}");
-    this.database = await this.openDb();
+    // If no database.
+    if (!await this.openDb()) {
+      return false;
+    }
     await this.setStore();
-
     return true;
   }
 
   Future createDatabaseFile() async {
+    this.databaseFile = new File(this.absoluteDatabasePath);
+    bool databaseExists = await this.databaseFile.exists();
+    databaseExists = databaseExists ? true : await this.createDatabaseFile();
     return (await this.databaseFile.create() is File) ? true : false;
   }
 
   Future openDb() async {
-    //Check if database file exists and create it if not.
-    this.databaseFile = new File(this.absoluteDatabasePath);
-    bool databaseExists = await this.databaseFile.exists();
-    databaseExists = databaseExists ? true : await this.createDatabaseFile();
-    //Wait for database file to be created, proceed to open it.
-    this.database = databaseExists
-        ? await databaseFactoryIo.openDatabase(this.absoluteDatabasePath)
-        : false;
-    return this.database;
+    // Only open an existing database, else, catch error and return false.
+    try {
+      this.database = await databaseFactoryIo
+          .openDatabase(this.absoluteDatabasePath, mode: DatabaseMode.existing);
+    } on DatabaseException catch (e) {
+      return false;
+    }
+    return true;
   }
 
   Future setStore({storeName}) async {
@@ -106,7 +108,6 @@ class DatabaseHandler {
       key = this.store.record(entryRecord).key;
     });
     results['data'] = key;
-    print(key);
     results['status'] = HttpStatus.ok;
     return results;
   }
