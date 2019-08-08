@@ -7,6 +7,8 @@ import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
+import '../response/response.dart';
+
 class DatabaseHandler {
   Database database;
   StoreRef store;
@@ -64,26 +66,30 @@ class DatabaseHandler {
     return this.store;
   }
 
-  Future findEntries(properties) async {
+  Future<Response> findEntries(properties) async {
     Map results = new Map.from(this._resultFields);
     List<Filter> filters = List();
     properties.forEach((k, v) => filters.add(Filter.matches(k, v)));
-    var records;
+    List records;
 
     await this.database.transaction((txn) async {
       records = await this
           .store
           .findKeys(txn, finder: Finder(filter: Filter.and(filters)));
     });
-
-    results['data'] = records;
-    results['status'] = HttpStatus.ok;
-    return results;
+    return await this.respond(records, 'FIND', join: true);
   }
 
-  Future addEntry(entry) async {
+  Future<Response> respond(data, origin,
+      {bool failed = false, bool join = false}) async {
+    Response response = Response();
+    await response.addData(data, origin, failed: failed, join: join);
+    return response;
+  }
+
+  Future<Response> addEntry(entry) async {
     /// Adds Map entry into database.
-    Map results = new Map.from(this._resultFields);
+    Response response = Response();
     var uuid = new Uuid();
     // Get current time to add to entry
     var now = new DateTime.now().millisecondsSinceEpoch.toString();
@@ -94,21 +100,17 @@ class DatabaseHandler {
       await this.store.record(key).put(txn, entry);
       key = this.store.record(key).key;
     });
-    results['data'] = key;
-    results['status'] = HttpStatus.ok;
-    return results;
+    return await this.respond(key, 'ADD');
   }
 
-  Future updateEntry(String entryRecord, Map updateData) async {
+  Future<Response> updateEntry(String entryRecord, Map updateData) async {
     /// Updates a single record in database.
-    Map results = new Map.from(this._resultFields);
+    Response response = Response();
     var key;
     await this.database.transaction((txn) async {
       await this.store.record(entryRecord).update(txn, updateData);
       key = this.store.record(entryRecord).key;
     });
-    results['data'] = key;
-    results['status'] = HttpStatus.ok;
-    return results;
+    return await this.respond(key, 'UPDATE');
   }
 }

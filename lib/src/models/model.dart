@@ -5,12 +5,12 @@ import 'package:path/path.dart';
 
 import '../utils/utils.dart';
 import '../database/database.dart';
+import '../response/response.dart';
 
 abstract class Model {
   DatabaseHandler databaseHandler;
-  Map result = Map();
+  Response result = Response();
   Model() {
     this.databaseHandler = DatabaseHandler();
-    this.result = Map();
   }
 }

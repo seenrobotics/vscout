@@ -1,14 +1,14 @@
 import 'package:args/command_runner.dart';
 
 import '../../models/update/data.dart';
+import '../vscout_command.dart';
 
-class DataCommand extends Command {
+class DataCommand extends Command with VscoutCommand {
   @override
   String get name => 'data';
   @override
   String get description => 'Find data to the database';
-  var databaseHandler;
-  Map results;
+  var results;
 
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
@@ -16,15 +16,11 @@ class DataCommand extends Command {
 
   @override
   run() async {
-    final UpdateDataModel findDataModel = new UpdateDataModel();
+    final UpdateDataModel findDataModel = UpdateDataModel();
     this.results = await findDataModel.updateStringData(
         argResults.rest[0], argResults.rest[1]);
-    print('Found entries: \n \n');
-    if (argResults['verbose'] == true) {
-      print('${this.results.toString()} \n \n');
-    } else {
-      print("${this.results['data'].toString()} \n \n");
-    }
-    return;
+    print(this.results);
+    print('Found entries: \n');
+    return this.printResponse(argResults['verbose']);
   }
 }
