@@ -16,20 +16,23 @@ class UpdateDataModel extends Model {
     this.result['queryType'] = 'UPDATE/DATA/STRING';
     return this.result;
   }
+
   Stream resultStream(List searchResultData, Map updateData) async* {
-    for(var record in searchResultData){
-      var updateResult = await this.databaseHandler.updateEntry((record), updateData);
+    for (var record in searchResultData) {
+      var updateResult =
+          await this.databaseHandler.updateEntry((record), updateData);
       //Check if each update query was succesful individaully to identify exactly which query failed.
-      if(updateResult['status']!=HttpStatus.ok){
+      if (updateResult['status'] != HttpStatus.ok) {
         //On fail, returns the failed query along with metadata.
         updateResult['query'] = [record, updateData];
         updateResult['queryType'] = 'UPDATE/DATA/MAP - UPDATE';
         throw updateResult;
-      } else{
+      } else {
         yield await this.databaseHandler.updateEntry((record), updateData);
       }
     }
   }
+
   Future updateMapData(Map searchParameters, Map updateData) async {
     //Call Database Handler search method.
     //TODO: Make it not error when no results are found.
@@ -38,7 +41,6 @@ class UpdateDataModel extends Model {
 
     //Find entries to be updated.
     if (searchResult['status'] != HttpStatus.ok) {
-      
       this.result = searchResult;
       this.result['query'] = searchParameters.toString();
       this.result['queryType'] = 'UPDATE/DATA/MAP - SEARCH';
@@ -46,14 +48,14 @@ class UpdateDataModel extends Model {
     }
     List updateResultData = List();
     List searchResultData = searchResult['data'];
-    await for (var updateResult in this.resultStream(searchResultData, updateData)){
+    await for (var updateResult
+        in this.resultStream(searchResultData, updateData)) {
       updateResultData.add(updateResult['data']);
-      
     }
     this.result['data'] = updateResultData;
     this.result['status'] = HttpStatus.ok;
     this.result['query'] = [searchParameters, updateData];
     this.result['queryType'] = 'UPDATE/DATA/MAP - UPDATE';
-    return this.result;    
+    return this.result;
   }
 }
