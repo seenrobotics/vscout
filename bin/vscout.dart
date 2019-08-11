@@ -1,31 +1,60 @@
 library vscout_cli.tool;
 
 import 'dart:io';
-
+import 'dart:async';
+import 'dart:convert';
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
+import 'package:vscout_cli/src/view/view.dart';
 import 'package:vscout_cli/vscout_cli.dart';
 
 // The exit code for a general error.
-int generalError = 1;
 
 main(List<String> args) async {
-  List<dynamic> commands = List();
+  print(
+      """                                                                                         
+                  .,,,,,,.                       ,,,,,,,  .,,,,,,,,,,,,,,,,,,,,,,,.                
+                   %@@@@@@%                    ,@@@@@@@* #@@@@@@@@@@@@@@@@@@@@@@@%                 
+                    %@@@@@@%                  (@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@@/                  
+                     /@@@@@@@                /@@@@@@@.,@@@@@@@@@@@@@@@@@@@@@@@@/                   
+                      /@@@@@@@              /@@@@@@&..@@@@@@@*        /@@@@@@@(                    
+                       .@@@@@@@,           %@@@@@@& .@@@@@@@/        *@@@@@@@.                     
+                         @@@@@@@/        ,@@@@@@@* %@@@@@@@         (@@@@@@%                       
+                          %@@@@@@*      .@@@@@@@* #@@@@@@@         &@@@@@@&                        
+                           %@@@@@@%    .@@@@@@@/ %@@@@@@@.        &@@@@@@&                         
+                            /@@@@@@#  /@@@@@@@.   /@@@@@@@.      %@@@@@@(                          
+                             ,@@@@@@@%@@@@@@@      ,@@@@@@@,      %@@@@*                           
+                              ,@@@@@@@@@@@@% /.      @@@@@@@#      %@@                             
+                                @@@@@@@@@@% *@@/      @@@@@@@(      *.                             
+                                 @@@@@@@@/ %@@@@*     .&@@@@@@(                                    
+                                  (@@@@@,.&@@@@@@*      #@@@@@@@                                   
+                                   #@@@,.@@@@@@@/        *@@@@@@@,                                 
+                                    ,@ .@@@@@@@/        ,@@@@@@@*                                  
+                                      *@@@@@@@.        ,@@@@@@@*                                   
+                                      .&@@@@@@*       %@@@@@@@                                     
+                                        &@@@@@@%     %@@@@@@@                                      
+                                         @@@@@@@%   #@@@@@@#                                       
+                                          #@@@@@@# @@@@@@@%                                        
+                                           /@@@@@@@@@@@@@(                                         
+                                            .@@@@@@@@@@@.                                          
+                                             .@@@@@@@@@,                                           
+                                              .&@@@@@@                                             
+                                                %@@@&                                              
+                                                 %@/                                               
+                                                  .                                                                                                                                                                                          
+  """);
+  print('Welcome to Vscout');
+  print('Robotics scouting software');
+  print('For more information, visit\nhttps://vscout.readthedocs.io');
+  List<dynamic> runCommands = List();
   // Create a new database handler with empty constructor.
   DatabaseHandler databaseHandler = DatabaseHandler();
   // Run all constructor functions in async function to await database construction completion.
   //  This is to prevent calls to an unfinished database object.
   // Add database related commands only if database exists, else only add [init] and [config].
-  if (await databaseHandler.initializeDatabase()) {
-    commands.add(AddCommand());
-    commands.add(FindCommand());
-    commands.add(LsCommand());
-    commands.add(RmCommand());
-    commands.add(ShowCommand());
-    commands.add(UpdateCommand());
-  }
-  commands.add(InitCommand());
-  commands.add(ConfigCommand());
+
+  await databaseHandler.initializeDatabase();
+
   var runner = CommandRunner(
       'vscout',
       'Robotics scouting software'
@@ -33,22 +62,12 @@ main(List<String> args) async {
           'https://vscout.readthedocs.io');
 
   runner.argParser.addFlag('verbose', negatable: false);
-  commands.forEach((command) => runner..addCommand(command));
-
-  return await runner.run(args).catchError((exception, stackTrace) {
-    if (exception is String) {
-      // STDOUT is buffered and writes are in batches.
-      stdout.writeln(exception);
-    } else {
-      // STDERR is unbuffered and every character is written as soon as it is available.
-      stderr.writeln('Error Message: $exception');
-      if (args.contains('--verbose')) {
-        stderr.writeln(stackTrace);
-      }
-    }
-    exitCode = generalError;
-  }).whenComplete(() {
-    // ANSI escape code to reset (all attributes off).
-    stdout.write(resetAll.wrap(''));
-  });
+  runner..addCommand(VscoutExecCommand());
+  runner..addCommand(VscoutCommand());
+  CliView view = CliView();
+  view.runner = runner;
+  Stream cmdLine = Utf8Decoder().bind(stdin).transform(InputArgsParser());
+  await view.listenTo(cmdLine);
+  await view.inputSubscription.asFuture();
+  print('Vscout concluded');
 }

@@ -12,10 +12,9 @@ class DataCommand extends Command with VscoutCommand {
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
   }
-
   @override
   run() async {
-    final FindDataModel findDataModel = new FindDataModel();
+    final FindDataModel findDataModel = FindDataModel();
     this.results = await findDataModel.findStringData(argResults.rest[0]);
     print('Found entries: \n \n');
     return this.printResponse(argResults['verbose']);

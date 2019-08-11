@@ -15,7 +15,7 @@ class DataCommand extends Command with VscoutCommand {
 
   @override
   run() async {
-    final AddDataModel addDataModel = new AddDataModel();
+    final AddDataModel addDataModel = AddDataModel();
     this.results = await addDataModel.addStringData(argResults.rest[0]);
     print('Added new entry \n \n');
     return this.printResponse(argResults['verbose']);

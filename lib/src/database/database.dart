@@ -35,10 +35,13 @@ class DatabaseHandler {
     this.relativeDatabasePath = '/../database/vscout.db';
     this.absoluteDatabasePath =
         ("${dirname(Platform.script.toFilePath()).toString()}${this.relativeDatabasePath}");
+
     // If no database.
+
     if (!await this.openDb()) {
       return false;
     }
+
     await this.setStore();
     return true;
   }
@@ -58,6 +61,7 @@ class DatabaseHandler {
     } on DatabaseException catch (e) {
       return false;
     }
+
     return true;
   }
 

@@ -19,7 +19,6 @@ class DataCommand extends Command with VscoutCommand {
     final UpdateDataModel findDataModel = UpdateDataModel();
     this.results = await findDataModel.updateStringData(
         argResults.rest[0], argResults.rest[1]);
-    print(this.results);
     print('Found entries: \n');
     return this.printResponse(argResults['verbose']);
   }
