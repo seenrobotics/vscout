@@ -43,9 +43,11 @@ main(List<String> args) async {
                                                  %@/                                               
                                                   .                                                                                                                                                                                          
   """);
-  print('Welcome to Vscout');
-  print('Robotics scouting software');
-  print('For more information, visit\nhttps://vscout.readthedocs.io');
+
+  print('Welcome to vscout cli\n'
+      'Robotics scouting software\n'
+      'For more information, visit\nhttps://vscout.readthedocs.io');
+
   List<dynamic> runCommands = List();
   // Create a new database handler with empty constructor.
   DatabaseHandler databaseHandler = DatabaseHandler();
@@ -69,5 +71,5 @@ main(List<String> args) async {
   Stream cmdLine = Utf8Decoder().bind(stdin).transform(InputArgsParser());
   await view.listenTo(cmdLine);
   await view.inputSubscription.asFuture();
-  print('Vscout concluded');
+  print('vscout exited with code 0');
 }

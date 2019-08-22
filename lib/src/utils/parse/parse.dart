@@ -34,7 +34,6 @@ List<String> parseArgsList(var string) {
         nextSpace = string.indexOf(' ', a) >= 0
             ? string.indexOf(' ', a)
             : (string.length);
-        // print('$a $nextSpace ${string.substring(a,nextSpace)}');
       }
       resultList.add(string.substring(a, nextSpace).trim());
       a = nextSpace + 1;
@@ -84,19 +83,12 @@ class DuplicateTransformer<S, T> implements StreamTransformer<S, T> {
     _subscription = null;
   }
 
-  /**
-   * Transformation
-   */
-
   void onData(S data) {
     _controller.add(data);
-    _controller.add(
-        data); /* DUPLICATE EXAMPLE!! REMOVE FOR YOUR OWN IMPLEMENTATION!! */
+    _controller.add(data);
   }
 
-  /**
-   * Bind
-   */
+// Bind
 
   Stream<T> bind(Stream<S> stream) {
     this._stream = stream;

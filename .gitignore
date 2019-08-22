@@ -21,3 +21,6 @@ db/
 doc/api/
 #Ignore databases
 *.db
+
+#Ignore config file
+config.json

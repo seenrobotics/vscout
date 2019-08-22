@@ -7,7 +7,7 @@ class ExitCommand extends Command {
   String get name => 'exit';
   CliView cliView;
   @override
-  String get description => 'Exit Vscout Command Line Interface';
+  String get description => 'Exit Vscout CLI';
 
   ExitCommand() {
     this.cliView = CliView();
@@ -16,6 +16,7 @@ class ExitCommand extends Command {
   run() async {
     ///TODO: Put this in VM not V
     // exit(200);
+    print("vscout cli exited with code 0");
     await this.cliView.close();
   }
 }
