@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+import '../vscout_command.dart';
 
 class AttributeCommand extends Command {
   @override
