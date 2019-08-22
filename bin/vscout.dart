@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
+
 import 'package:vscout_cli/src/view/view.dart';
 import 'package:vscout_cli/vscout_cli.dart';
 
@@ -68,8 +69,13 @@ main(List<String> args) async {
   runner..addCommand(VscoutCommand());
   CliView view = CliView();
   view.runner = runner;
-  Stream cmdLine = Utf8Decoder().bind(stdin).transform(InputArgsParser());
-  await view.listenTo(cmdLine);
+
+
+  // Stream cmdLine = Utf8Decoder().bind(stdin).transform(InputArgsParser());
+  // await view.listenTo(cmdLine);
+
+  await view.listenTo(stdin);
+
   await view.inputSubscription.asFuture();
   print('vscout exited with code 0');
 }

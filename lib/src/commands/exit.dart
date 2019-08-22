@@ -16,7 +16,6 @@ class ExitCommand extends Command {
   run() async {
     ///TODO: Put this in VM not V
     // exit(200);
-    print("vscout cli exited with code 0");
-    await this.cliView.close();
+    await this.cliView.close(0);
   }
 }
