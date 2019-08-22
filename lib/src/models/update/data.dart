@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 
 import '../../utils/utils.dart';
 import '../model.dart';
+import '../../response/response.dart';
 
 class UpdateDataModel extends Model {
   updateStringData(String queryParameters, String queryData) async {
@@ -12,50 +13,44 @@ class UpdateDataModel extends Model {
     Map searchParameters = parseArgsJson(queryParameters);
     Map updateData = parseArgsJson(queryData);
     this.result = await this.updateMapData(searchParameters, updateData);
-    this.result['query'] = [queryParameters, queryData];
-    this.result['queryType'] = 'UPDATE/DATA/STRING';
+    this.result.statusCheck([
+      [queryParameters, queryData],
+      'STRING'
+    ]);
     return this.result;
   }
 
-  Stream resultStream(List searchResultData, Map updateData) async* {
+  Stream<Response> resultStream(List searchResultData, Map updateData) async* {
     for (var record in searchResultData) {
+      // print(record);
       var updateResult =
           await this.databaseHandler.updateEntry((record), updateData);
       //Check if each update query was succesful individaully to identify exactly which query failed.
-      if (updateResult['status'] != HttpStatus.ok) {
-        //On fail, returns the failed query along with metadata.
-        updateResult['query'] = [record, updateData];
-        updateResult['queryType'] = 'UPDATE/DATA/MAP - UPDATE';
-        throw updateResult;
-      } else {
-        yield await this.databaseHandler.updateEntry((record), updateData);
-      }
+      updateResult
+          .statusCheck([record, updateData], 'UPDATE/DATA/MAP - UPDATE');
+      yield await this.databaseHandler.updateEntry((record), updateData);
     }
   }
 
   Future updateMapData(Map searchParameters, Map updateData) async {
     //Call Database Handler search method.
     //TODO: Make it not error when no results are found.
-    Map searchResult =
+    Response searchResult =
         (await this.databaseHandler.findEntries(searchParameters));
 
     //Find entries to be updated.
-    if (searchResult['status'] != HttpStatus.ok) {
-      this.result = searchResult;
-      this.result['query'] = searchParameters.toString();
-      this.result['queryType'] = 'UPDATE/DATA/MAP - SEARCH';
-      return this.result;
-    }
-    List updateResultData = List();
-    List searchResultData = searchResult['data'];
+    searchResult
+        .statusCheck([searchParameters.toString(), 'UPDATE/DATA/MAP - SEARCH']);
+    // TODO: Result stack trace
+    // print(searchResult.data);
+
+    Response updateResponse = Response();
+    List searchResultData = searchResult.data;
     await for (var updateResult
         in this.resultStream(searchResultData, updateData)) {
-      updateResultData.add(updateResult['data']);
+      updateResponse.joinResponse(updateResult);
     }
-    this.result['data'] = updateResultData;
-    this.result['status'] = HttpStatus.ok;
-    this.result['query'] = [searchParameters, updateData];
-    this.result['queryType'] = 'UPDATE/DATA/MAP - UPDATE';
+    this.result = updateResponse;
     return this.result;
   }
 }

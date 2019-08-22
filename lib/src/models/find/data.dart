@@ -10,15 +10,13 @@ class FindDataModel extends Model {
   findStringData(String dataEntry) async {
     Map properties = parseArgsJson(dataEntry);
     await this.findMapData(properties);
-    this.result['query'] = dataEntry;
-    this.result['queryType'] = 'FIND/DATA/STRING';
+    this.result.statusCheck(dataEntry, 'FIND/DATA/STRING');
     return this.result;
   }
 
   findMapData(Map dataEntry) async {
     this.result = await await this.databaseHandler.findEntries(dataEntry);
-    this.result['query'] = dataEntry.toString();
-    this.result['queryType'] = 'FIND/DATA/MAP';
+    this.result.statusCheck(dataEntry, 'FIND/DATA/MAP');
     return this.result;
   }
 
@@ -38,8 +36,7 @@ class FindDataModel extends Model {
         properties[k is String ? k.trim() : k.toString().trim()] =
             v is String ? v.trim() : v.toString().trim());
     await this.findMapData(properties);
-    this.result['query'] = relativeFilePath;
-    this.result['queryType'] = 'FIND/DATA/MAP';
+    this.result.statusCheck(relativeFilePath, 'FIND/DATA/MAP');
     return this.result;
   }
 }

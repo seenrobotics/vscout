@@ -10,15 +10,13 @@ class AddDataModel extends Model {
   addStringData(String dataEntry) async {
     Map properties = parseArgsJson(dataEntry);
     await this.addMapData(properties);
-    this.result['query'] = dataEntry;
-    this.result['queryType'] = 'ADD/DATA/STRING';
+    this.result.statusCheck(dataEntry, 'ADD/DATA/STRING');
     return this.result;
   }
 
   addMapData(Map dataEntry) async {
     this.result = await this.databaseHandler.addEntry(dataEntry);
-    this.result['query'] = dataEntry.toString();
-    this.result['queryType'] = 'ADD/DATA/MAP';
+    this.result.statusCheck(dataEntry.toString(), 'ADD/DATA/MAP');
     return this.result;
   }
 
@@ -38,8 +36,7 @@ class AddDataModel extends Model {
         properties[k is String ? k.trim() : k.toString().trim()] =
             v is String ? v.trim() : v.toString().trim());
     await this.addMapData(properties);
-    this.result['query'] = relativeFilePath;
-    this.result['queryType'] = 'ADD/DATA/FILE';
+    this.result.statusCheck(relativeFilePath, 'ADD/DATA/FILE');
     return this.result;
   }
 }
