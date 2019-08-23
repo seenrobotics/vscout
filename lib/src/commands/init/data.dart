@@ -13,6 +13,12 @@ class DatabaseInit extends Command with VscoutCommand {
     argParser..addFlag('verbose', defaultsTo: false);
   }
   @override
+  void handleResponse(data){
+    
+  }
+
+
+  @override
   run() async {
     final FindDataModel findDataModel = FindDataModel();
     this.results = await findDataModel.findStringData(argResults.rest[0]);

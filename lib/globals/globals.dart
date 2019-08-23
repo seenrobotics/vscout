@@ -1,2 +1,4 @@
-// TODO Implement this library.
+
+
+Map globals = Map();
 String relativeConfigFilePath = "/../config.yaml";

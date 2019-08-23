@@ -1,17 +1,17 @@
 import 'package:args/command_runner.dart';
 
-import '../../models/find/data.dart';
+import '../../models/rm/data.dart';
 import '../vscout_command.dart';
 
 class DataCommand extends Command with VscoutCommand {
   @override
   String get name => 'data';
   @override
-  String get description => 'Find data to the database';
+  String get description => 'remove data from the database';
 
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
-    this.viewModel = FindDataModel(); 
+    this.viewModel = RemoveDataModel(); 
     this.initializeStream();
   }
   @override

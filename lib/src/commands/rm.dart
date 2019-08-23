@@ -1,6 +1,7 @@
 import 'package:args/command_runner.dart';
 
 import 'rm/attribute.dart';
+import 'rm/data.dart';
 
 class RmCommand extends Command {
   @override
@@ -11,6 +12,8 @@ class RmCommand extends Command {
 
   RmCommand() {
     addSubcommand(AttributeCommand());
+    addSubcommand(DataCommand());
+
   }
   @override
   run() async {}

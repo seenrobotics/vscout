@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:args/command_runner.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:vscout_cli/src/view/view.dart';
 import 'dart:async';
 import 'package:vscout_cli/globals/globals.dart' as globals;
+import 'package:safe_config/safe_config.dart';
+import 'dart:mirrors';
+import 'package:yaml/yaml.dart';
+import '../database/database.dart';
+
 
 class UserQuery {
   String queryTitle;
@@ -49,14 +56,31 @@ class InitCommand extends Command {
 
 
 
+
   @override
   run() async {
-        
+
     this.absoluteConfigFilePath = 
     ("${dirname(Platform.script.toFilePath()).toString()}${this.relativeConfigFilePath}");
     ///Intializes vscout-cli on first run.
-    File configFile = new File(this.absoluteConfigFilePath);
+    File configFile = File(this.absoluteConfigFilePath);
+    //TODO: make this read as a stream of lines
+    var config = loadYaml(configFile.readAsStringSync());
+    //Create datbase if it doesn't exist
+    File databaseFile = File(config["database_location"]);
+    if(!await databaseFile.exists()) {
+          databaseFile.createSync();
+    }
+    
+    //Start up database
+    await DatabaseHandler().initializeDatabase(config["database_location"]);
+    await DatabaseHandler().setStore(storeName: config["main_store"]);
+    
+
+
     if(await configFile.exists()){
+      var config = new ApplicationConfiguration(this.absoluteConfigFilePath);
+      print("${config.database_location}");
       print("Error! [${this.absoluteConfigFilePath}] already exists. Try running [vscout-exec config] instead.");
       return false;
     }
@@ -67,14 +91,17 @@ class InitCommand extends Command {
 name: vscout_config
 description: config settings for vscout
 """);
-      UserQuery databaseLocationQuery = UserQuery("Database_Location", "/../database/vscout.db", writeSink);
-      UserQuery mainStoreQuery = UserQuery("Main_Store", "vscout_main", writeSink);
+      UserQuery databaseLocationQuery = UserQuery("database_location", "/../database/vscout.db", writeSink);
+      UserQuery mainStoreQuery = UserQuery("main_store", "vscout_main", writeSink);
       databaseLocationQuery.askQuery();
       interruptSubscription = await this.cliView.requestInterrupt(this.name);
       interruptSubscription.onData((data) async {
         if(this.initStage ==0){
-          String databaseLocation = await databaseLocationQuery.handleQuery(data[0]);
-
+        String databaseLocation = await databaseLocationQuery.handleQuery(data[0]);
+        File databaseFile = File(databaseLocation);
+        if(!await databaseFile.exists()) {
+          databaseFile.createSync();
+        }
         //TODO: Create database at location.
 
         mainStoreQuery.askQuery();
@@ -89,3 +116,12 @@ description: config settings for vscout
   }
 }
 
+class ApplicationConfiguration extends Configuration {
+ 	ApplicationConfiguration(String fileName) : 
+ 		super.fromFile(File(fileName));
+
+  String database_location;
+  String main_store;
+  String name;
+  String description;
+}

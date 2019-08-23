@@ -13,7 +13,6 @@ class InterruptException implements Exception{
 
 class CliView {
   StreamController _commandController = StreamController.broadcast();
-
   StreamController get streamController => _commandController;
   Stream stream;
   bool inputInterrupt = false;
@@ -48,7 +47,6 @@ class CliView {
       this.interruptListener = null;
     }
   }
-
 
   Future listenTo(Stream stream) async {
     this.inputSubscription = Utf8Decoder().bind(stream).transform(InputArgsParser()).listen((data) {

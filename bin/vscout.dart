@@ -8,10 +8,20 @@ import 'package:io/ansi.dart';
 
 import 'package:vscout_cli/src/view/view.dart';
 import 'package:vscout_cli/vscout_cli.dart';
+import 'package:yaml/yaml.dart';
+import 'package:path/path.dart';
+
 
 // The exit code for a general error.
+  String relativeConfigFilePath = "/../config.yaml";
 
 main(List<String> args) async {
+  String absoluteConfigFilePath = 
+    ("${dirname(Platform.script.toFilePath()).toString()}${relativeConfigFilePath}");
+    File configFile = File(absoluteConfigFilePath);
+  
+    var config = loadYaml(configFile.readAsStringSync());
+
   print(
       """                                                                                         
                   .,,,,,,.                       ,,,,,,,  .,,,,,,,,,,,,,,,,,,,,,,,.                
@@ -51,13 +61,12 @@ main(List<String> args) async {
 
   List<dynamic> runCommands = List();
   // Create a new database handler with empty constructor.
-  DatabaseHandler databaseHandler = DatabaseHandler();
   // Run all constructor functions in async function to await database construction completion.
   //  This is to prevent calls to an unfinished database object.
   // Add database related commands only if database exists, else only add [init] and [config].
 
-  await databaseHandler.initializeDatabase();
-
+  await DatabaseHandler().initializeDatabase(config["database_location"]);
+  await DatabaseHandler().setStore(storeName: config["main_store"]);
   var runner = CommandRunner(
       'vscout',
       'Robotics scouting software'
