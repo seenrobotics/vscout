@@ -3,6 +3,30 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:vscout_cli/src/view/view.dart';
 import 'dart:async';
+import 'package:vscout_cli/globals/globals.dart' as globals;
+
+class UserQuery {
+  String queryTitle;
+  var queryContent;
+  var queryDefault;
+  IOSink writeSink;
+  UserQuery(String title, var queryDefault, IOSink writeSink){
+    this.queryTitle = title;
+    this.queryDefault = queryDefault;
+    this.writeSink = writeSink;
+
+  }
+  askQuery() async{
+    print("Please enter $queryTitle, $queryDefault by default");
+  }
+  Future handleQuery(var data) async{
+    queryContent = (data.isNotEmpty) ? data : queryDefault;
+    this.writeSink.write("$queryTitle: $queryContent\n");
+    print("$queryTitle set to $queryContent");
+    return queryContent;
+  }
+}
+
 
 
 class InitCommand extends Command {
@@ -43,36 +67,25 @@ class InitCommand extends Command {
 name: vscout_config
 description: config settings for vscout
 """);
-
+      UserQuery databaseLocationQuery = UserQuery("Database_Location", "/../database/vscout.db", writeSink);
+      UserQuery mainStoreQuery = UserQuery("Main_Store", "vscout_main", writeSink);
+      databaseLocationQuery.askQuery();
       interruptSubscription = await this.cliView.requestInterrupt(this.name);
-
       interruptSubscription.onData((data) async {
         if(this.initStage ==0){
-          String relativeDatabasePath;
+          String databaseLocation = await databaseLocationQuery.handleQuery(data[0]);
 
-          if(data[0].isEmpty){
-            // Database defaults to this location.
-            relativeDatabasePath = '/../database/vscout.db';
-          }else {
-          relativeDatabasePath = data[0];
-          }
         //TODO: Create database at location.
-        writeSink.write("database_path : $relativeDatabasePath\n");
 
-        print("Database created at $relativeDatabasePath\nPlease enter main database store name: [vscout_main by default]");
+        mainStoreQuery.askQuery();
         this.initStage++;
         } else if(this.initStage ==1) {
-          String mainStoreName;
-          if(data[0].isEmpty){
-            mainStoreName = 'vscout_main';
-          } else{
-            mainStoreName = data[0];
-          }
-        writeSink.write("database_path : $mainStoreName\n");
-        print("Main store set to $mainStoreName\n");
+        String mainStoreName = await mainStoreQuery.handleQuery(data[0]);
+        
         this.cliView.concludeInterrupt(this.name);
         }
       });
     }
   }
 }
+
