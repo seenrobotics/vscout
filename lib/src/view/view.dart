@@ -6,7 +6,7 @@ import 'package:io/ansi.dart';
 import 'package:vscout_cli/src/utils/utils.dart';
 import 'dart:convert';
 
-class InterruptException implements Exception{
+class InterruptException implements Exception {
   String cause;
   InterruptException(this.cause);
 }
@@ -20,8 +20,8 @@ class CliView {
   CommandRunner runner;
   StreamSubscription inputSubscription;
 
-
-  StreamController<List<String>> interruptController = StreamController.broadcast();
+  StreamController<List<String>> interruptController =
+      StreamController.broadcast();
   String interruptListener;
   static final CliView _singleton = CliView._internal();
   factory CliView() {
@@ -29,31 +29,34 @@ class CliView {
     // Constructors can't call async functions, actual initialization is done in [InitializeDb()].
   }
 
-  CliView._internal() {
-  }
+  CliView._internal() {}
 
   Future<StreamSubscription> requestInterrupt(String requester) async {
-      if(this.inputInterrupt || this.interruptController.hasListener){
-        throw InterruptException("$requester ${this.interruptListener}");
-      }
-      
-      this.inputInterrupt = true;
-      this.interruptListener = requester;
-      return this.interruptController.stream.listen(null);
+    if (this.inputInterrupt || this.interruptController.hasListener) {
+      throw InterruptException("$requester ${this.interruptListener}");
+    }
+
+    this.inputInterrupt = true;
+    this.interruptListener = requester;
+    return this.interruptController.stream.listen(null);
   }
+
   Future concludeInterrupt(String requester) async {
-    if(this.inputInterrupt && this.interruptController.hasListener && this.interruptListener == requester) {
+    if (this.inputInterrupt &&
+        this.interruptController.hasListener &&
+        this.interruptListener == requester) {
       this.inputInterrupt = false;
       this.interruptListener = null;
     }
   }
 
   Future listenTo(Stream stream) async {
-    this.inputSubscription = Utf8Decoder().bind(stream).transform(InputArgsParser()).listen((data) {
-      if(this.inputInterrupt){
+    this.inputSubscription =
+        Utf8Decoder().bind(stream).transform(InputArgsParser()).listen((data) {
+      if (this.inputInterrupt) {
         this.interruptController.add(data);
-      } else{
-      this.runCommand(data);
+      } else {
+        this.runCommand(data);
       }
     });
   }

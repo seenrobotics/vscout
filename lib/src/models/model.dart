@@ -14,7 +14,7 @@ abstract class Model {
   StreamController<Map> inputController = StreamController();
   StreamController outputController = StreamController();
 
-  void handleInputData(data){}
+  void handleInputData(data) {}
 
   Model() {
     this.databaseHandler = DatabaseHandler();

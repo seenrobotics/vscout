@@ -13,7 +13,6 @@ class RmCommand extends Command {
   RmCommand() {
     addSubcommand(AttributeCommand());
     addSubcommand(DataCommand());
-
   }
   @override
   run() async {}

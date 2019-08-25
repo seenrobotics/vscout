@@ -15,9 +15,7 @@ class FileCommand extends Command with VscoutCommand {
     argParser..addFlag('verbose', defaultsTo: false);
   }
   @override
-  void handleResponse(data){
-    
-  }
+  void handleResponse(data) {}
   @override
   run() async {
     final FindDataModel addDataModel = new FindDataModel();

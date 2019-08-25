@@ -12,11 +12,9 @@ class DatabaseInit extends Command with VscoutCommand {
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
   }
-  @override
-  void handleResponse(data){
-    
-  }
 
+  @override
+  void handleResponse(data) {}
 
   @override
   run() async {

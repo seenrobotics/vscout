@@ -11,16 +11,15 @@ import 'package:vscout_cli/vscout_cli.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart';
 
-
 // The exit code for a general error.
-  String relativeConfigFilePath = "/../config.yaml";
+String relativeConfigFilePath = "/../config.yaml";
 
 main(List<String> args) async {
-  String absoluteConfigFilePath = 
-    ("${dirname(Platform.script.toFilePath()).toString()}${relativeConfigFilePath}");
-    File configFile = File(absoluteConfigFilePath);
-  
-    var config = loadYaml(configFile.readAsStringSync());
+  String absoluteConfigFilePath =
+      ("${dirname(Platform.script.toFilePath()).toString()}${relativeConfigFilePath}");
+  File configFile = File(absoluteConfigFilePath);
+
+  var config = loadYaml(configFile.readAsStringSync());
 
   print(
       """                                                                                         
@@ -78,7 +77,6 @@ main(List<String> args) async {
   runner..addCommand(VscoutCommand());
   CliView view = CliView();
   view.runner = runner;
-
 
   // Stream cmdLine = Utf8Decoder().bind(stdin).transform(InputArgsParser());
   // await view.listenTo(cmdLine);

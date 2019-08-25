@@ -11,12 +11,12 @@ class DataCommand extends Command with VscoutCommand {
 
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
-    this.viewModel = FindDataModel(); 
+    this.viewModel = FindDataModel();
     this.initializeStream();
   }
   @override
   void handleResponse(data) {
-    print('Found entries: \n \n');    
+    print('Found entries: \n \n');
     this.results = data;
     this.printResponse(argResults['verbose']);
     this.streamSubscription.pause();

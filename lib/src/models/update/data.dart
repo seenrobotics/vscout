@@ -9,17 +9,17 @@ import '../../response/response.dart';
 import 'dart:async';
 
 class UpdateDataModel extends Model {
-  
-  UpdateDataModel() {
-  }
+  UpdateDataModel() {}
 
   @override
-  void handleInputData(data) async{
+  void handleInputData(data) async {
     // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
-      this.outputController.add(await updateStringData(data["queryParameters"], data["queryData"]));
+    this.outputController.add(
+        await updateStringData(data["queryParameters"], data["queryData"]));
   }
-  
-  Future<Response> updateStringData(String queryParameters, String queryData) async {
+
+  Future<Response> updateStringData(
+      String queryParameters, String queryData) async {
     ///Parse string JSON to Map and pass to [updateMapData] method.
     Map searchParameters = parseArgsJson(queryParameters);
     Map updateData = parseArgsJson(queryData);
@@ -30,7 +30,7 @@ class UpdateDataModel extends Model {
     ]);
     return this.result;
   }
-  
+
   Stream<Response> resultStream(List searchResultData, Map updateData) async* {
     for (var record in searchResultData) {
       // print(record);
@@ -54,10 +54,11 @@ class UpdateDataModel extends Model {
         .statusCheck([searchParameters.toString(), 'UPDATE/DATA/MAP - SEARCH']);
     // TODO: Result stack trace
     Response updateResponse = Response();
-    
+
     List searchResultData = searchResult.data;
-    List updateResponseList = await this.databaseHandler.updateEntries(searchResultData, updateData);
-    for(Response response in updateResponseList){
+    List updateResponseList =
+        await this.databaseHandler.updateEntries(searchResultData, updateData);
+    for (Response response in updateResponseList) {
       updateResponse.joinResponse(response);
     }
     // await for (var updateResult

@@ -10,19 +10,14 @@ import 'package:uuid/uuid.dart';
 
 import '../response/response.dart';
 
-
 class DatabaseStream {
   StreamController inputStreamController = StreamController();
   StreamController outputStreamController = StreamController();
-
 }
-
 
 class DatabaseHandler {
   Database database;
   StoreRef store;
-
-
 
   File databaseFile;
   String relativeDatabasePath;
@@ -39,8 +34,7 @@ class DatabaseHandler {
     // Constructors can't call async functions, actual initialization is done in [InitializeDb()].
   }
 
-  DatabaseHandler._internal() {
-  }
+  DatabaseHandler._internal() {}
 
   Future initializeDatabase(String relativeDatabasePath) async {
     //Set the path to the database
@@ -115,7 +109,7 @@ class DatabaseHandler {
     });
     return await this.respond(key, 'ADD');
   }
-  
+
   Future<Response> updateEntry(String entryRecord, Map updateData) async {
     /// Updates a single record in database.
     Response response = Response();
@@ -127,27 +121,30 @@ class DatabaseHandler {
     return await this.respond(key, 'UPDATE');
   }
 
-  Future<List<Response>> updateEntries(List entryRecords, Map updateData) async {
+  Future<List<Response>> updateEntries(
+      List entryRecords, Map updateData) async {
     /// Updates a single record in database.
     List<Response> result = List();
     await this.database.transaction((txn) async {
-      for(String record in entryRecords){
+      for (String record in entryRecords) {
         await this.store.record(record).update(txn, updateData);
         result.add(await this.respond(record, "UPDATE"));
       }
     });
     return result;
   }
-  Future<Response> removeEntry(String entryRecord) async{
-    await this.database.transaction((txn) async{
+
+  Future<Response> removeEntry(String entryRecord) async {
+    await this.database.transaction((txn) async {
       await this.store.record(entryRecord).delete(txn);
     });
     return await this.respond(entryRecord, "REMOVE");
   }
-  Future<List<Response>> removeEntries(List entryRecords) async{
+
+  Future<List<Response>> removeEntries(List entryRecords) async {
     List<Response> result = List();
-    await this.database.transaction((txn) async{
-      for(String record in entryRecords){
+    await this.database.transaction((txn) async {
+      for (String record in entryRecords) {
         await this.store.record(record).delete(txn);
         result.add(await this.respond(record, "UPDATE"));
       }

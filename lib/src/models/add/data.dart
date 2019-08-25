@@ -8,9 +8,10 @@ import '../model.dart';
 
 class AddDataModel extends Model {
   @override
-  void handleInputData(data) async{
-      this.outputController.add(await addStringData(data["queryParameters"]));
+  void handleInputData(data) async {
+    this.outputController.add(await addStringData(data["queryParameters"]));
   }
+
   addStringData(String dataEntry) async {
     Map properties = parseArgsJson(dataEntry);
     await this.addMapData(properties);
