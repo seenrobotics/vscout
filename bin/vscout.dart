@@ -6,7 +6,9 @@ import 'dart:convert';
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
 
-import 'package:vscout_cli/src/view/view.dart';
+import 'package:vscout_cli/src/views/view.dart';
+import 'package:vscout_cli/src/views/cliLogo.dart' as logo;
+
 import 'package:vscout_cli/vscout_cli.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart';
@@ -15,48 +17,11 @@ import 'package:path/path.dart';
 String relativeConfigFilePath = "/../config.yaml";
 
 main(List<String> args) async {
+  logo.printLogo();
   String absoluteConfigFilePath =
       ("${dirname(Platform.script.toFilePath()).toString()}${relativeConfigFilePath}");
   File configFile = File(absoluteConfigFilePath);
-
   var config = loadYaml(configFile.readAsStringSync());
-
-  print(
-      """                                                                                         
-                  .,,,,,,.                       ,,,,,,,  .,,,,,,,,,,,,,,,,,,,,,,,.                
-                   %@@@@@@%                    ,@@@@@@@* #@@@@@@@@@@@@@@@@@@@@@@@%                 
-                    %@@@@@@%                  (@@@@@@@  @@@@@@@@@@@@@@@@@@@@@@@@/                  
-                     /@@@@@@@                /@@@@@@@.,@@@@@@@@@@@@@@@@@@@@@@@@/                   
-                      /@@@@@@@              /@@@@@@&..@@@@@@@*        /@@@@@@@(                    
-                       .@@@@@@@,           %@@@@@@& .@@@@@@@/        *@@@@@@@.                     
-                         @@@@@@@/        ,@@@@@@@* %@@@@@@@         (@@@@@@%                       
-                          %@@@@@@*      .@@@@@@@* #@@@@@@@         &@@@@@@&                        
-                           %@@@@@@%    .@@@@@@@/ %@@@@@@@.        &@@@@@@&                         
-                            /@@@@@@#  /@@@@@@@.   /@@@@@@@.      %@@@@@@(                          
-                             ,@@@@@@@%@@@@@@@      ,@@@@@@@,      %@@@@*                           
-                              ,@@@@@@@@@@@@% /.      @@@@@@@#      %@@                             
-                                @@@@@@@@@@% *@@/      @@@@@@@(      *.                             
-                                 @@@@@@@@/ %@@@@*     .&@@@@@@(                                    
-                                  (@@@@@,.&@@@@@@*      #@@@@@@@                                   
-                                   #@@@,.@@@@@@@/        *@@@@@@@,                                 
-                                    ,@ .@@@@@@@/        ,@@@@@@@*                                  
-                                      *@@@@@@@.        ,@@@@@@@*                                   
-                                      .&@@@@@@*       %@@@@@@@                                     
-                                        &@@@@@@%     %@@@@@@@                                      
-                                         @@@@@@@%   #@@@@@@#                                       
-                                          #@@@@@@# @@@@@@@%                                        
-                                           /@@@@@@@@@@@@@(                                         
-                                            .@@@@@@@@@@@.                                          
-                                             .@@@@@@@@@,                                           
-                                              .&@@@@@@                                             
-                                                %@@@&                                              
-                                                 %@/                                               
-                                                  .                                                                                                                                                                                          
-  """);
-
-  print('Welcome to vscout cli\n'
-      'Robotics scouting software\n'
-      'For more information, visit\nhttps://vscout.readthedocs.io');
 
   List<dynamic> runCommands = List();
   // Create a new database handler with empty constructor.

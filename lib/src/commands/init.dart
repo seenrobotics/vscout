@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:args/command_runner.dart';
 import 'dart:io';
 import 'package:path/path.dart';
-import 'package:vscout_cli/src/view/view.dart';
+import 'package:vscout_cli/src/views/view.dart';
 import 'dart:async';
 import 'package:vscout_cli/globals/globals.dart' as globals;
 import 'package:safe_config/safe_config.dart';
