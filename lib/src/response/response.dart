@@ -2,7 +2,7 @@ import 'dart:io';
 
 class Response<T> {
   int status = HttpStatus.noContent;
-  List data = List();
+  List<T> data = List();
   var query;
   List origin = List();
 
