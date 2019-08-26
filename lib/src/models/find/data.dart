@@ -5,27 +5,34 @@ import 'package:path/path.dart';
 
 import '../../utils/utils.dart';
 import '../model.dart';
+import '../../response/response.dart';
 
 class FindDataModel extends Model {
   @override
-  void handleInputData(data) async {
-    this.outputController.add(await findStringData(data["queryParameters"]));
+  void handleInputData(input) async {
+    // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
+    if (input.method == 'data') {
+      input.setCallback((data) {
+        this.outputController.add(data);
+      });
+      input.recieveResponse(this.findStringData(input.queryParameters));
+    }
   }
 
-  findStringData(String dataEntry) async {
-    Map properties = parseArgsJson(dataEntry);
+  Future<Response> findStringData(String queryParameters) async {
+    Map properties = parseArgsJson(queryParameters);
     await this.findMapData(properties);
-    this.result.statusCheck(dataEntry, 'FIND/DATA/STRING');
+    this.result.statusCheck(queryParameters, 'FIND/DATA/STRING');
     return this.result;
   }
 
-  findMapData(Map dataEntry) async {
+  Future<Response> findMapData(Map dataEntry) async {
     this.result = await await this.databaseHandler.findEntries(dataEntry);
     this.result.statusCheck(dataEntry, 'FIND/DATA/MAP');
     return this.result;
   }
 
-  findFileData(String relativeFilePath) async {
+  Future<Response> findFileData(String relativeFilePath) async {
     String fileFolder = '/../files/';
     //  Tries to find file in [files] folder.
     var absFilePath =
