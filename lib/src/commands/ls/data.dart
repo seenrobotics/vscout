@@ -18,7 +18,7 @@ class DataCommand extends Command with VscoutCommand {
   void handleResponse(data) {
     print('Entry Data: \n \n');
     this.results = data;
-    this.printResponse(argResults['verbose']);
+    this.printResponse(argResults['verbose'], keysOnly: false);
     this.streamSubscription.pause();
   }
 

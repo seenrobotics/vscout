@@ -10,12 +10,20 @@ mixin VscoutCommand {
   StreamSubscription streamSubscription;
   Request request;
   String get name;
-  bool printResponse(verbose) {
+  bool printResponse(verbose, {bool keysOnly = true}) {
     if (verbose == true) {
-      print('${this.results.readResponse()} \n \n');
+      print('${this.results.readResponse(keysOnly)}\n');
+    } else if (keysOnly) {
+      for (var key in this.results.keys) {
+        print("$key\r");
+      }
+      print("${this.results.keys} \n \n");
     } else {
-      print("${this.results.data} \n \n");
+      for (Map data in this.results.data) {
+        print("$data\r");
+      }
     }
+    print("\n");
     return true;
   }
 

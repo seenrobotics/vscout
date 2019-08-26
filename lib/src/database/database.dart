@@ -84,13 +84,29 @@ class DatabaseHandler {
           .store
           .findKeys(txn, finder: Finder(filter: Filter.and(filters)));
     });
-    return await this.respond<String>(records, 'FIND', join: true);
+    return await this.respond<String>(records, 'FIND');
   }
 
   Future<Response> respond<T>(data, origin,
-      {bool failed = false, bool join = false}) async {
+      {bool failed = false, bool join = false, String dataType = 'key'}) async {
     Response<T> response = Response();
-    await response.addData(data, origin, failed: failed, join: join);
+    Map record = Map();
+    List<Map> records = List();
+
+    if (data is String) {
+      record = {"key": data, "value": null};
+      records.add(record);
+    } else if (data is Map) {
+      records.add(data);
+    } else if (data is List<String>) {
+      for (String key in data) {
+        record = {"key": key, "value": null};
+        records.add(record);
+      }
+    } else if (data is List<Map>) {
+      records += data;
+    }
+    await response.addRecords(records, origin, failed: failed);
     return response;
   }
 
@@ -151,18 +167,18 @@ class DatabaseHandler {
     });
     return await result;
   }
-  
-  Future<List<Response>> lsEntries(List entryRecords) async{
+
+  Future<List<Response>> lsEntries(List entryRecords) async {
     //TODO: Take parameters of number of returns + specific properties to list is specified
     List<Response> result = List();
     List<RecordSnapshot> resultRecords;
     Iterable<String> asdf = entryRecords.skip(0);
-    await this.database.transaction((txn) async{
+    await this.database.transaction((txn) async {
       resultRecords = await this.store.records(asdf).getSnapshots(txn);
     });
-  for(var record in resultRecords){
-    var recordMap = {'key' : record.key, 'value' : record.value};
-    result.add(await this.respond(recordMap, 'LS'));
+    for (var record in resultRecords) {
+      var recordMap = {'key': record.key, 'value': record.value};
+      result.add(await this.respond(recordMap, 'LS'));
     }
     return result;
   }

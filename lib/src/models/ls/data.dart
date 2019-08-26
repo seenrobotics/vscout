@@ -35,9 +35,9 @@ class LsDataModel extends Model {
         .statusCheck([searchParameters.toString(), 'LS/DATA/MAP - SEARCH']);
     // TODO: Result stack trace
     Response lsResponse = Response();
-    List searchResultData = searchResult.data;
-    List lsResponseList =
-        await this.databaseHandler.lsEntries(searchResultData);
+    List<String> searchResultKeys = searchResult.keys;
+    List<Response> lsResponseList =
+        await this.databaseHandler.lsEntries(searchResultKeys);
     for (Response response in lsResponseList) {
       lsResponse.joinResponse(response);
     }
