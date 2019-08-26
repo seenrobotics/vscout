@@ -1,15 +1,16 @@
-library vscout_cli.tool;
+library vscout.tool;
 
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
-
-import 'package:vscout_cli/src/view/view.dart';
-import 'package:vscout_cli/vscout_cli.dart';
-import 'package:yaml/yaml.dart';
 import 'package:path/path.dart';
+import 'package:yaml/yaml.dart';
+
+import 'package:vscout/vscout_cli.dart';
+import 'package:vscout/database.dart';
 
 // The exit code for a general error.
 String relativeConfigFilePath = "/../config.yaml";
@@ -73,8 +74,8 @@ main(List<String> args) async {
           'https://vscout.readthedocs.io');
 
   runner.argParser.addFlag('verbose', negatable: false);
+  runner..addCommand(VscoutDataCommand());
   runner..addCommand(VscoutExecCommand());
-  runner..addCommand(VscoutCommand());
   CliView view = CliView();
   view.runner = runner;
 

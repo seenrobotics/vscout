@@ -1,4 +1,4 @@
-library vscout_cli.database;
+library vscout.database;
 
 import 'dart:async';
 import 'dart:io';
@@ -8,7 +8,7 @@ import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
-import '../response/response.dart';
+import 'package:vscout/transfer.dart';
 
 class DatabaseStream {
   StreamController inputStreamController = StreamController();
