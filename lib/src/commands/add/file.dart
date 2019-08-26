@@ -2,6 +2,9 @@ import 'package:args/command_runner.dart';
 
 import '../../models/add/data.dart';
 
+//TODO: This is broken right now because the input stream will default to parse input as string.
+//TODO: Need to fix this by creating QUERY class, which will specify FILE or STRING for example.
+
 class FileCommand extends Command {
   @override
   String get name => 'file';

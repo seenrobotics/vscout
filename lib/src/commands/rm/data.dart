@@ -1,24 +1,22 @@
 import 'package:args/command_runner.dart';
 
-import '../../models/update/data.dart';
+import '../../models/rm/data.dart';
 import '../vscout_command.dart';
-import 'dart:async';
 
 class DataCommand extends Command with VscoutCommand {
   @override
   String get name => 'data';
   @override
-  String get description => 'Find data to the database';
-  var results;
+  String get description => 'remove data from the database';
 
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
-    this.viewModel = UpdateDataModel();
+    this.viewModel = RemoveDataModel();
     this.initializeStream();
   }
   @override
   void handleResponse(data) {
-    print('Updated entries: \n');
+    print('Found entries: \n \n');
     this.results = data;
     this.printResponse(argResults['verbose']);
     this.streamSubscription.pause();
@@ -27,10 +25,7 @@ class DataCommand extends Command with VscoutCommand {
   @override
   run() async {
     this.streamSubscription.resume();
-    Map data = {
-      "queryParameters": argResults.rest[0],
-      "queryData": argResults.rest[1]
-    };
+    Map data = {"queryParameters": argResults.rest[0]};
     viewModel.inputController.add(data);
   }
 }

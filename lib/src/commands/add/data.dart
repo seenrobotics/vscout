@@ -11,13 +11,22 @@ class DataCommand extends Command with VscoutCommand {
 
   DataCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
+    this.viewModel = AddDataModel();
+    this.initializeStream();
+  }
+
+  @override
+  void handleResponse(data) {
+    print('Added entries: \n \n');
+    this.results = data;
+    this.printResponse(argResults['verbose']);
+    this.streamSubscription.pause();
   }
 
   @override
   run() async {
-    final AddDataModel addDataModel = new AddDataModel();
-    this.results = await addDataModel.addStringData(argResults.rest[0]);
-    print('Added new entry \n \n');
-    return this.printResponse(argResults['verbose']);
+    this.streamSubscription.resume();
+    Map data = {"queryParameters": argResults.rest[0]};
+    viewModel.inputController.add(data);
   }
 }

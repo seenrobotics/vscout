@@ -1,5 +1,6 @@
 library vscout_cli.database;
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:sembast/sembast.dart';
@@ -9,6 +10,11 @@ import 'package:uuid/uuid.dart';
 
 import '../response/response.dart';
 
+class DatabaseStream {
+  StreamController inputStreamController = StreamController();
+  StreamController outputStreamController = StreamController();
+}
+
 class DatabaseHandler {
   Database database;
   StoreRef store;
@@ -17,7 +23,9 @@ class DatabaseHandler {
   String relativeDatabasePath;
   String absoluteDatabasePath;
 
-  Map _resultFields;
+  Map _resultFields = {
+    "status": HttpStatus.processing,
+  };
 
   static final DatabaseHandler _singleton = new DatabaseHandler._internal();
 
@@ -28,17 +36,15 @@ class DatabaseHandler {
 
   DatabaseHandler._internal() {}
 
-  initializeDatabase() async {
-    this._resultFields = new Map();
-    this._resultFields['status'] = HttpStatus.processing;
+  Future initializeDatabase(String relativeDatabasePath) async {
     //Set the path to the database
-    this.relativeDatabasePath = '/../database/vscout.db';
     this.absoluteDatabasePath =
-        ("${dirname(Platform.script.toFilePath()).toString()}${this.relativeDatabasePath}");
+        ("${dirname(Platform.script.toFilePath()).toString()}${relativeDatabasePath}");
     // If no database.
     if (!await this.openDb()) {
       return false;
     }
+
     await this.setStore();
     return true;
   }
@@ -58,6 +64,7 @@ class DatabaseHandler {
     } on DatabaseException catch (e) {
       return false;
     }
+
     return true;
   }
 
@@ -112,5 +119,36 @@ class DatabaseHandler {
       key = this.store.record(entryRecord).key;
     });
     return await this.respond(key, 'UPDATE');
+  }
+
+  Future<List<Response>> updateEntries(
+      List entryRecords, Map updateData) async {
+    /// Updates a single record in database.
+    List<Response> result = List();
+    await this.database.transaction((txn) async {
+      for (String record in entryRecords) {
+        await this.store.record(record).update(txn, updateData);
+        result.add(await this.respond(record, "UPDATE"));
+      }
+    });
+    return result;
+  }
+
+  Future<Response> removeEntry(String entryRecord) async {
+    await this.database.transaction((txn) async {
+      await this.store.record(entryRecord).delete(txn);
+    });
+    return await this.respond(entryRecord, "REMOVE");
+  }
+
+  Future<List<Response>> removeEntries(List entryRecords) async {
+    List<Response> result = List();
+    await this.database.transaction((txn) async {
+      for (String record in entryRecords) {
+        await this.store.record(record).delete(txn);
+        result.add(await this.respond(record, "UPDATE"));
+      }
+    });
+    return await result;
   }
 }

@@ -6,9 +6,20 @@ import 'package:path/path.dart';
 import '../../utils/utils.dart';
 import '../model.dart';
 import '../../response/response.dart';
+import 'dart:async';
 
 class UpdateDataModel extends Model {
-  updateStringData(String queryParameters, String queryData) async {
+  UpdateDataModel() {}
+
+  @override
+  void handleInputData(data) async {
+    // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
+    this.outputController.add(
+        await updateStringData(data["queryParameters"], data["queryData"]));
+  }
+
+  Future<Response> updateStringData(
+      String queryParameters, String queryData) async {
     ///Parse string JSON to Map and pass to [updateMapData] method.
     Map searchParameters = parseArgsJson(queryParameters);
     Map updateData = parseArgsJson(queryData);
@@ -28,7 +39,7 @@ class UpdateDataModel extends Model {
       //Check if each update query was succesful individaully to identify exactly which query failed.
       updateResult
           .statusCheck([record, updateData], 'UPDATE/DATA/MAP - UPDATE');
-      yield await this.databaseHandler.updateEntry((record), updateData);
+      yield updateResult;
     }
   }
 
@@ -42,14 +53,18 @@ class UpdateDataModel extends Model {
     searchResult
         .statusCheck([searchParameters.toString(), 'UPDATE/DATA/MAP - SEARCH']);
     // TODO: Result stack trace
-    // print(searchResult.data);
-
     Response updateResponse = Response();
+
     List searchResultData = searchResult.data;
-    await for (var updateResult
-        in this.resultStream(searchResultData, updateData)) {
-      updateResponse.joinResponse(updateResult);
+    List updateResponseList =
+        await this.databaseHandler.updateEntries(searchResultData, updateData);
+    for (Response response in updateResponseList) {
+      updateResponse.joinResponse(response);
     }
+    // await for (var updateResult
+    //     in this.resultStream(searchResultData, updateData)) {
+    //   updateResponse.joinResponse(updateResult);
+    // }
     this.result = updateResponse;
     return this.result;
   }
