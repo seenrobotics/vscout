@@ -8,8 +8,20 @@ class LsDataVM extends ViewModel {
       input.setCallback((data) {
         this.outputController.add(data);
       });
-      input.recieveResponse(this.lsStringData(input.queryParameters));
+      input.recieveResponse(this.lsData(input));
     }
+  }
+
+  Future<Response> lsData(Request data) async {
+    Response lsResponse = Response();
+    List<Response> lsResponseList =
+        await this.databaseHandler.lsEntries(data.optionArgs);
+    for (Response response in lsResponseList) {
+      lsResponse.joinResponse(response);
+    }
+
+    this.result = lsResponse;
+    return this.result;
   }
 
   Future<Response> lsStringData(String queryParameters) async {
@@ -20,22 +32,22 @@ class LsDataVM extends ViewModel {
   }
 
   Future<Response> lsMapData(Map searchParameters) async {
-    Response<String> searchResult =
-        (await this.databaseHandler.findEntries(searchParameters));
+    // Response<String> searchResult =
+    //     (await this.databaseHandler.findEntries(searchParameters));
 
-    //Find entries to be updated.
-    searchResult
-        .statusCheck([searchParameters.toString(), 'LS/DATA/MAP - SEARCH']);
-    // TODO: Result stack trace
-    Response lsResponse = Response();
-    List<String> searchResultKeys = searchResult.keys;
-    List<Response> lsResponseList =
-        await this.databaseHandler.lsEntries(searchResultKeys);
-    for (Response response in lsResponseList) {
-      lsResponse.joinResponse(response);
-    }
-    this.result = lsResponse;
-    return this.result;
+    // //Find entries to be updated.
+    // searchResult
+    //     .statusCheck([searchParameters.toString(), 'LS/DATA/MAP - SEARCH']);
+    // // TODO: Result stack trace
+    // Response lsResponse = Response();
+    // List<String> searchResultKeys = searchResult.keys;
+    // List<Response> lsResponseList =
+    //     await this.databaseHandler.lsEntries(searchResultKeys);
+    // for (Response response in lsResponseList) {
+    //   lsResponse.joinResponse(response);
+    // }
+    // this.result = lsResponse;
+    // return this.result;
   }
 
   Future<Response> lsFileData(String relativeFilePath) async {

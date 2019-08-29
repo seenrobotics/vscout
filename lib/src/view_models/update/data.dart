@@ -9,9 +9,16 @@ class UpdateDataVM extends ViewModel {
       input.setCallback((data) {
         this.outputController.add(data);
       });
-      input.recieveResponse(
-          this.updateStringData(input.queryParameters, input.queryData));
+      input.recieveResponse(this.updateData(input));
     }
+  }
+
+  Future<Response> updateData(Request data) async {
+    Response resultResponse =
+        await this.databaseHandler.updateEntries(data.optionArgs);
+
+    this.result = resultResponse;
+    return this.result;
   }
 
   Future<Response> updateStringData(
@@ -52,8 +59,8 @@ class UpdateDataVM extends ViewModel {
     Response updateResponse = Response();
 
     List<String> searchResultKeys = searchResult.keys;
-    List updateResponseList =
-        await this.databaseHandler.updateEntries(searchResultKeys, updateData);
+    List updateResponseList = List();
+    // await this.databaseHandler.updateEntries(searchResultKeys, updateData);
     for (Response response in updateResponseList) {
       updateResponse.joinResponse(response);
     }

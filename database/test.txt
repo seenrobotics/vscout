@@ -1,0 +1,4 @@
+vscout filter -c2381,IN,2381
+vscout find data -rFIND@0
+vscout ls data -rKEYS@0
+vscout update data -rKEYS@0 -dsomething,somethingElse

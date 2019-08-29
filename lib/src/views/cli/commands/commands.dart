@@ -2,8 +2,9 @@ library vscout_cli.commands;
 
 import 'package:args/command_runner.dart';
 
-import 'exit.dart';
 import 'add.dart';
+import 'exit.dart';
+import 'filter.dart';
 import 'find.dart';
 import 'config.dart';
 import 'init.dart';
@@ -13,6 +14,7 @@ import 'show.dart';
 import 'update.dart';
 
 export 'add.dart';
+export 'filter.dart';
 export 'find.dart';
 export 'config.dart';
 export 'init.dart';
@@ -35,6 +37,7 @@ class VscoutDataCommand extends Command {
     addSubcommand(RmCommand());
     addSubcommand(ShowCommand());
     addSubcommand(UpdateCommand());
+    addSubcommand(FilterCommand());
   }
 
   @override

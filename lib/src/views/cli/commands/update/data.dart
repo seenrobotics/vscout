@@ -8,14 +8,20 @@ class DataCommand extends Command with VscoutCommand {
   @override
   String get name => 'data';
   @override
-  String get description => 'Find data to the database';
+  String get description => 'Update data to the database';
   var results;
 
   DataCommand() {
-    argParser..addFlag('verbose', defaultsTo: false);
+    argParser
+      ..addFlag('verbose', defaultsTo: false)
+      ..addMultiOption('ref', abbr: 'r', splitCommas: false)
+      ..addMultiOption('data', abbr: 'd', splitCommas: true)
+      ..addMultiOption('json', splitCommas: false)
+      ..addMultiOption('key', abbr: 'k', splitCommas: true);
     this.viewModel = UpdateDataVM();
     this.initializeStream();
   }
+
   @override
   void handleResponse(data) {
     print('Updated entries: \n');
@@ -26,9 +32,7 @@ class DataCommand extends Command with VscoutCommand {
 
   @override
   run() async {
-    this.newRequest();
-    this.request.queryData = argResults.rest[0];
-    this.request.queryParameters = argResults.rest[1];
+    this.parseArguments();
     this.streamSubscription.resume();
     viewModel.inputController.add(this.request);
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:tuple/tuple.dart';
 
 import 'package:vscout/transfer.dart' show Response;
 
@@ -10,6 +11,13 @@ class Request<T> {
   Response response;
   var queryParameters;
   var queryData;
+  Map realParameters;
+  Map realData;
+  List args = List();
+  List<Tuple2> optionArgs = List();
+  Map flags = Map();
+  Map options = Map();
+
   Request(String method) {
     this.method = method;
   }
