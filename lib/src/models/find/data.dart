@@ -7,6 +7,11 @@ import '../../utils/utils.dart';
 import '../model.dart';
 
 class FindDataModel extends Model {
+  @override
+  void handleInputData(data) async {
+    this.outputController.add(await findStringData(data["queryParameters"]));
+  }
+
   findStringData(String dataEntry) async {
     Map properties = parseArgsJson(dataEntry);
     await this.findMapData(properties);

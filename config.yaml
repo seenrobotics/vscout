@@ -1,0 +1,4 @@
+name: vscout_config
+description: config settings for vscout
+database_location: /../database/vscout.db
+main_store: vscout_main
