@@ -1,5 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'package:vscout_cli/src/view/view.dart';
+import 'package:vscout_cli/src/views/view.dart';
 import 'dart:io';
 
 class ExitCommand extends Command {
