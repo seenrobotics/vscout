@@ -11,13 +11,16 @@ class DataCommand extends Command with VscoutCommand {
   String get description => 'remove data from the database';
 
   DataCommand() {
-    argParser..addFlag('verbose', defaultsTo: false);
+    argParser
+      ..addFlag('verbose', defaultsTo: false)
+      ..addMultiOption('ref', abbr: 'r', splitCommas: false)
+      ..addMultiOption('key', abbr: 'k', splitCommas: true);
     this.viewModel = RmDataVM();
     this.initializeStream();
   }
   @override
   void handleResponse(data) {
-    print('Found entries: \n \n');
+    print('Removed entries: \n \n');
     this.results = data;
     this.printResponse(argResults['verbose']);
     this.streamSubscription.pause();
@@ -25,8 +28,7 @@ class DataCommand extends Command with VscoutCommand {
 
   @override
   run() async {
-    this.newRequest();
-    this.request.queryParameters = argResults.rest[0];
+    this.parseArguments();
     this.streamSubscription.resume();
     viewModel.inputController.add(this.request);
   }

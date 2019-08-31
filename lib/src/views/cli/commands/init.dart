@@ -10,7 +10,7 @@ import 'dart:async';
 import 'package:safe_config/safe_config.dart';
 import 'dart:mirrors';
 import 'package:yaml/yaml.dart';
-import 'package:vscout/src/database/database.dart';
+import 'package:vscout/src/database/mainDatabaseHandler.dart';
 
 class UserQuery {
   String queryTitle;
@@ -66,8 +66,8 @@ class InitCommand extends Command {
     }
 
     //Start up database
-    await DatabaseHandler().initializeDatabase(config["database_location"]);
-    await DatabaseHandler().setStore(storeName: config["main_store"]);
+    await MainDatabaseHandler().initializeDatabase(config["database_location"]);
+    await MainDatabaseHandler().setStore(storeName: config["main_store"]);
 
     if (await configFile.exists()) {
       var config = new ApplicationConfiguration(this.absoluteConfigFilePath);

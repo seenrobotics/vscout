@@ -8,13 +8,20 @@ class AddDataVM extends ViewModel {
       input.setCallback((data) {
         this.outputController.add(data);
       });
-      input.recieveResponse(this.addStringData(input.queryData));
+      input.recieveResponse(this.addData(input));
     } else if (input.method == 'file') {
       input.setCallback((data) {
         this.outputController.add(data);
       });
-      input.recieveResponse(this.addFileData(input.queryData));
+      input.recieveResponse(this.addFileData(input.queryParameters));
     }
+  }
+
+  Future<Response> addData(Request data) async {
+    Response resultResponse =
+        await this.databaseHandler.addEntry(data.optionArgs);
+    this.result = resultResponse;
+    return this.result;
   }
 
   Future<Response> addStringData(String dataEntry) async {
@@ -24,8 +31,8 @@ class AddDataVM extends ViewModel {
     return this.result;
   }
 
-  Future addMapData(Map dataEntry) async {
-    this.result = await this.databaseHandler.addEntry(dataEntry);
+  Future<Response> addMapData(Map dataEntry) async {
+    // this.result = await this.databaseHandler.addEntry(dataEntry);
     this.result.statusCheck(dataEntry.toString(), 'ADD/DATA/MAP');
     return this.result;
   }

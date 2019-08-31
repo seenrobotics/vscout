@@ -1,28 +1,31 @@
-part of vscout.view_models;
+part of '../../view_models.dart';
 
-class FindDataVM extends ViewModel {
+class FilterVM extends ViewModel {
   FilterHandler queryDBHandler = FilterHandler();
 
   @override
   void handleInputData(input) async {
     // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
-    if (input.method == 'data') {
+    if (input.method == 'filter') {
       input.setCallback((data) {
         this.outputController.add(data);
       });
-      input.recieveResponse(this.findFilter(input));
+      input.recieveResponse(this.filterData(input));
     }
   }
 
-  Future<Response> findFilter(Request data) async {
-    Tuple2 filterTuple = await queryDBHandler.getFilter(data.args[0]);
-    this.result =
-        await this.databaseHandler.findEntriesFilter(filterTuple.item2);
-    this.result.statusCheck(data, 'FIND/DATA/Filter');
-    return this.result;
+  Future<Response> filterData(Request request) async {
+    Response response;
+    List args = request.args;
+    response = await FilterHandler()
+        .setFinder(args[0], args.sublist(1), create: request.flags['new']);
+    if ((request.flags["new"])) {
+      response.responseText = "Created new filter FIND@0";
+    }
+    return response;
   }
 
-  Future<Response> findData(var data) async {
+  Future<Response> findMapData(Map dataEntry) async {
     // this.result = await this.databaseHandler.findEntries(dataEntry);
     // this.result.statusCheck(dataEntry, 'FIND/DATA/MAP');
     // return this.result;
@@ -43,7 +46,7 @@ class FindDataVM extends ViewModel {
     baseMap.forEach((k, v) =>
         properties[k is String ? k.trim() : k.toString().trim()] =
             v is String ? v.trim() : v.toString().trim());
-    await this.findData(properties);
+    await this.findMapData(properties);
     this.result.statusCheck(relativeFilePath, 'FIND/DATA/MAP');
     return this.result;
   }

@@ -4,7 +4,7 @@ import 'package:vscout/vscout_cli.dart' show VscoutCommand;
 
 class DatabaseInit extends Command with VscoutCommand {
   @override
-  String get name => 'data';
+  String get name => 'test';
   @override
   String get description => 'Find data to the database';
 

@@ -13,7 +13,10 @@ class DataCommand extends Command with VscoutCommand {
   String get description => 'Add data to the database';
 
   DataCommand() {
-    argParser..addFlag('verbose', defaultsTo: false);
+    argParser
+      ..addFlag('verbose', defaultsTo: false)
+      ..addMultiOption('data', abbr: 'd', splitCommas: true)
+      ..addMultiOption('json', splitCommas: false);
     this.viewModel = AddDataVM();
     this.initializeStream();
   }
@@ -28,8 +31,7 @@ class DataCommand extends Command with VscoutCommand {
 
   @override
   run() async {
-    this.newRequest();
-    this.request.queryData = argResults.rest[0];
+    this.parseArguments();
     this.streamSubscription.resume();
     viewModel.inputController.add(this.request);
   }

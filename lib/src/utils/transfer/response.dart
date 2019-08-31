@@ -5,6 +5,7 @@ class Response<T> {
   List<Map> data = List();
   var query;
   List origin = List();
+  String responseText;
 
   List<String> get keys {
     List<String> keys = List();

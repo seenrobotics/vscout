@@ -8,8 +8,15 @@ class RmDataVM extends ViewModel {
       input.setCallback((data) {
         this.outputController.add(data);
       });
-      input.recieveResponse(this.removeStringData(input.queryParameters));
+      input.recieveResponse(this.removeData(input));
     }
+  }
+
+  Future<Response> removeData(Request data) async {
+    Response resultResponse =
+        await this.databaseHandler.rmEntries(data.optionArgs);
+    this.result = resultResponse;
+    return this.result;
   }
 
   Future<Response> removeStringData(String queryParameters) async {

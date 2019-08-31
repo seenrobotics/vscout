@@ -1,3 +1,3 @@
 library vscout.database;
 
-export 'src/database/database.dart';
+export 'src/database/mainDatabaseHandler.dart';
