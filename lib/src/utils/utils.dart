@@ -1,3 +1,3 @@
-library vscout_cli.utils;
+library vscout.utils;
 
 export 'parse/parse.dart';
