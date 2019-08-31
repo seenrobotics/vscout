@@ -1,20 +1,44 @@
-library vscout_cli.tool;
+library vscout.tool;
 
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
-import 'package:vscout_cli/vscout_cli.dart';
+
+import 'package:vscout/src/views/cli/view.dart';
+import 'package:vscout/src/views/cliLogo.dart' as logo;
+
+import 'package:vscout/vscout_cli.dart';
+import 'package:yaml/yaml.dart';
+import 'package:path/path.dart';
+import 'package:vscout/src/database/filterHandler.dart';
+import 'package:yaml/yaml.dart';
+
+import 'package:vscout/vscout_cli.dart';
+import 'package:vscout/database.dart';
 
 // The exit code for a general error.
-int generalError = 1;
+String relativeConfigFilePath = "/../config.yaml";
 
 main(List<String> args) async {
+  logo.printLogo();
+  String absoluteConfigFilePath =
+      ("${dirname(Platform.script.toFilePath()).toString()}${relativeConfigFilePath}");
+  File configFile = File(absoluteConfigFilePath);
+  var config = loadYaml(configFile.readAsStringSync());
+
+  List<dynamic> runCommands = List();
   // Create a new database handler with empty constructor.
-  DatabaseHandler databaseHandler = DatabaseHandler();
   // Run all constructor functions in async function to await database construction completion.
   //  This is to prevent calls to an unfinished database object.
-  await databaseHandler.InitializeDb();
+  // Add database related commands only if database exists, else only add [init] and [config].
+
+  await MainDatabaseHandler().initializeDatabase(config["database_location"]);
+  await MainDatabaseHandler().setStore(storeName: config["main_store"]);
+  await FilterHandler().initializeDatabase(config["database_location"]);
+  await FilterHandler().setStore();
   var runner = CommandRunner(
       'vscout',
       'Robotics scouting software'
@@ -22,30 +46,16 @@ main(List<String> args) async {
           'https://vscout.readthedocs.io');
 
   runner.argParser.addFlag('verbose', negatable: false);
+  runner..addCommand(VscoutDataCommand());
+  runner..addCommand(VscoutExecCommand());
+  CliView view = CliView();
+  view.runner = runner;
 
-  runner..addCommand(AddCommand(databaseHandler));
-  runner..addCommand(FindCommand(databaseHandler));
-  runner..addCommand(ConfigCommand());
-  runner..addCommand(InitCommand());
-  runner..addCommand(LsCommand());
-  runner..addCommand(RmCommand());
-  runner..addCommand(ShowCommand());
-  runner..addCommand(UpdateCommand(databaseHandler));
+  // Stream cmdLine = Utf8Decoder().bind(stdin).transform(InputArgsParser());
+  // await view.listenTo(cmdLine);
 
-  return await runner.run(args).catchError((exception, stackTrace) {
-    if (exception is String) {
-      // STDOUT is buffered and writes are in batches.
-      stdout.writeln(exception);
-    } else {
-      // STDERR is unbuffered and every character is written as soon as it is available.
-      stderr.writeln('Error Message: $exception');
-      if (args.contains('--verbose')) {
-        stderr.writeln(stackTrace);
-      }
-    }
-    exitCode = generalError;
-  }).whenComplete(() {
-    // ANSI escape code to reset (all attributes off).
-    stdout.write(resetAll.wrap(''));
-  });
+  await view.listenTo(stdin);
+
+  await view.inputSubscription.asFuture();
+  print('vscout exited with code 0');
 }

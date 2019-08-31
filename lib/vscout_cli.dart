@@ -1,5 +1,5 @@
 library vscout_cli;
 
-export 'src/utils/utils.dart';
-export 'src/commands/commands.dart';
-export 'src/database/database.dart';
+export 'src/views/cli/commands/commands.dart';
+export 'src/views/cli/view.dart';
+export './src/views/cli/commands/vscout_command.dart';
