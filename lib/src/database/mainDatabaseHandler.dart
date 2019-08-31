@@ -5,21 +5,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
-import 'package:path/path.dart';
-import 'package:uuid/uuid.dart';
 import 'package:tuple/tuple.dart';
-import 'package:vscout/src/utils/utils.dart';
 
 import 'package:vscout/transfer.dart';
-import './databaseHandler.dart';
-import './modifyHandler.dart';
+import 'package:vscout/database.dart' show DatabaseHandler, ModifyHandler;
 
 class MainDatabaseHandler extends DatabaseHandler {
   RegExp keysetRegExp = RegExp(r"^KEYS@-?[1234567890]+$", multiLine: false);
 
   List<List<String>> keysetList = List();
-  Uuid uuid = Uuid();
   Map _resultFields = {
     "status": HttpStatus.processing,
   };
@@ -32,9 +26,11 @@ class MainDatabaseHandler extends DatabaseHandler {
     // Constructors can't call async functions, actual initialization is done in [InitializeDb()].
   }
 
-  MainDatabaseHandler._internal() {}
+  MainDatabaseHandler._internal();
 
-  Future initialize2() async {
+  @override
+  Future initializeDatabase(String relativeDatabasePath) async {
+    await super.initializeDatabase(relativeDatabasePath);
     await ModifyHandler().initializeDatabase(this.relativeDatabasePath);
     await ModifyHandler().setStore(storeName: 'modify');
   }
@@ -97,7 +93,6 @@ class MainDatabaseHandler extends DatabaseHandler {
   }
 
   Future<Response> findEntries(properties) async {
-    Map results = new Map.from(this._resultFields);
     List<Filter> filters = List();
     properties.forEach((k, v) => filters.add(Filter.matches(k, v)));
     List<String> records;
@@ -215,7 +210,6 @@ class MainDatabaseHandler extends DatabaseHandler {
     }
     addKeyset(keys);
     List<Response> result = List();
-    List<RecordSnapshot> resultRecords;
     Iterable<String> asdf = keys.skip(0);
     await this.database.transaction((txn) async {
       await this.store.records(asdf).delete(txn);

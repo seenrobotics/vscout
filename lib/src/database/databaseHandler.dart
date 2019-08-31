@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:io';
 
@@ -5,22 +6,20 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
-import 'package:tuple/tuple.dart';
 
 import 'package:vscout/transfer.dart';
-
+/// The database handler object that contains database intialization functions.
 abstract class DatabaseHandler {
   Database database;
   StoreRef store;
-
+  //TODO: Make file paths and file objects private, and use getters and setters to publicly access instead.
   File databaseFile;
   String relativeDatabasePath;
   String absoluteDatabasePath;
-  Future initialize2();
-  Uuid uuid = Uuid();
+  Uuid _uuid = Uuid();
 
   String get randomId {
-    return uuid.v4();
+    return _uuid.v4();
   }
 
   int get now {
@@ -38,7 +37,6 @@ abstract class DatabaseHandler {
       return false;
     }
     await this.setStore();
-    await this.initialize2();
     return true;
   }
 
