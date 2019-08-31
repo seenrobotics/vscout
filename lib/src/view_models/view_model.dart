@@ -18,6 +18,9 @@ abstract class ViewModel {
   ViewModel() {
     this.databaseHandler = DatabaseHandler();
     this.inputController.stream.listen((data) => this.handleInputData(data));
+    // this.inputController.stream.listen((data) async{
+    //   this.outputController.add(await this.handleInputData(data));
+    //   });
     //TODO: Add pause() and resume() functions.
   }
 }
