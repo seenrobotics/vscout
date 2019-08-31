@@ -7,19 +7,24 @@ import '../../utils/utils.dart';
 import '../model.dart';
 import '../../response/response.dart';
 import 'dart:async';
+import 'dart:mirrors';
 
 class UpdateDataModel extends Model {
   UpdateDataModel() {}
-
   @override
-  void handleInputData(data) async {
+  void handleInputData(input) async {
     // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
-    this.outputController.add(
-        await updateStringData(data["queryParameters"], data["queryData"]));
+    if (input.method == 'data') {
+      input.setCallback((data) {
+        this.outputController.add(data);
+      });
+      input.recieveResponse(
+          this.updateStringData(input.queryParameters, input.queryData));
+    }
   }
 
   Future<Response> updateStringData(
-      String queryParameters, String queryData) async {
+      String queryData, String queryParameters) async {
     ///Parse string JSON to Map and pass to [updateMapData] method.
     Map searchParameters = parseArgsJson(queryParameters);
     Map updateData = parseArgsJson(queryData);
@@ -43,7 +48,7 @@ class UpdateDataModel extends Model {
     }
   }
 
-  Future updateMapData(Map searchParameters, Map updateData) async {
+  Future<Response> updateMapData(Map searchParameters, Map updateData) async {
     //Call Database Handler search method.
     //TODO: Make it not error when no results are found.
     Response searchResult =

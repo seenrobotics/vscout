@@ -5,27 +5,39 @@ import 'package:path/path.dart';
 
 import '../../utils/utils.dart';
 import '../model.dart';
+import '../../response/response.dart';
 
 class AddDataModel extends Model {
   @override
-  void handleInputData(data) async {
-    this.outputController.add(await addStringData(data["queryParameters"]));
+  void handleInputData(input) async {
+    // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
+    if (input.method == 'data') {
+      input.setCallback((data) {
+        this.outputController.add(data);
+      });
+      input.recieveResponse(this.addStringData(input.queryData));
+    } else if (input.method == 'file') {
+      input.setCallback((data) {
+        this.outputController.add(data);
+      });
+      input.recieveResponse(this.addFileData(input.queryData));
+    }
   }
 
-  addStringData(String dataEntry) async {
+  Future<Response> addStringData(String dataEntry) async {
     Map properties = parseArgsJson(dataEntry);
     await this.addMapData(properties);
     this.result.statusCheck(dataEntry, 'ADD/DATA/STRING');
     return this.result;
   }
 
-  addMapData(Map dataEntry) async {
+  Future addMapData(Map dataEntry) async {
     this.result = await this.databaseHandler.addEntry(dataEntry);
     this.result.statusCheck(dataEntry.toString(), 'ADD/DATA/MAP');
     return this.result;
   }
 
-  addFileData(String relativeFilePath) async {
+  Future addFileData(String relativeFilePath) async {
     String fileFolder = '/../files/';
     //  Tries to find file in [files] folder.
     var absFilePath =

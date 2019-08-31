@@ -9,8 +9,14 @@ import '../../response/response.dart';
 
 class RemoveDataModel extends Model {
   @override
-  void handleInputData(data) async {
-    this.outputController.add(await removeStringData(data["queryParameters"]));
+  void handleInputData(input) async {
+    // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
+    if (input.method == 'data') {
+      input.setCallback((data) {
+        this.outputController.add(data);
+      });
+      input.recieveResponse(this.removeStringData(input.queryParameters));
+    }
   }
 
   Future<Response> removeStringData(String queryParameters) async {
@@ -31,7 +37,7 @@ class RemoveDataModel extends Model {
     }
   }
 
-  Future removeMapData(Map searchParameters) async {
+  Future<Response> removeMapData(Map searchParameters) async {
     //Call Database Handler search method.
     //TODO: Make it not error when no results are found.
     Response searchResult =

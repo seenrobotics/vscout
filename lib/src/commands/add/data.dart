@@ -25,8 +25,9 @@ class DataCommand extends Command with VscoutCommand {
 
   @override
   run() async {
+    this.newRequest();
+    this.request.queryData = argResults.rest[0];
     this.streamSubscription.resume();
-    Map data = {"queryParameters": argResults.rest[0]};
-    viewModel.inputController.add(data);
+    viewModel.inputController.add(this.request);
   }
 }
