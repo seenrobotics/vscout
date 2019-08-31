@@ -1,4 +1,4 @@
-name: vscout_cli
+name: vscout
 description: Scouting software for robotics competitions.
 authors: [Sean D'Souza <seangdsouza@gmail.com>, Jeffrey Li <dr.cheddar@outlook.com>]
 homepage: https://vscout.readthedocs.io/
@@ -39,7 +39,7 @@ dev_dependencies:
     sdk: flutter
 
 executables:
-  vscout.dart:
+  vscout:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -8,7 +8,6 @@ import 'package:path/path.dart';
 import 'package:vscout/src/views/cli/view.dart';
 import 'dart:async';
 import 'package:safe_config/safe_config.dart';
-import 'dart:mirrors';
 import 'package:yaml/yaml.dart';
 import 'package:vscout/src/database/mainDatabaseHandler.dart';
 
