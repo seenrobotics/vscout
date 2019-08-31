@@ -77,20 +77,36 @@ class DatabaseHandler {
     Map results = new Map.from(this._resultFields);
     List<Filter> filters = List();
     properties.forEach((k, v) => filters.add(Filter.matches(k, v)));
-    List records;
+    List<String> records;
 
     await this.database.transaction((txn) async {
       records = await this
           .store
           .findKeys(txn, finder: Finder(filter: Filter.and(filters)));
     });
-    return await this.respond(records, 'FIND', join: true);
+    return await this.respond<String>(records, 'FIND');
   }
 
-  Future<Response> respond(data, origin,
-      {bool failed = false, bool join = false}) async {
-    Response response = Response();
-    await response.addData(data, origin, failed: failed, join: join);
+  Future<Response> respond<T>(data, origin,
+      {bool failed = false, bool join = false, String dataType = 'key'}) async {
+    Response<T> response = Response();
+    Map record = Map();
+    List<Map> records = List();
+
+    if (data is String) {
+      record = {"key": data, "value": null};
+      records.add(record);
+    } else if (data is Map) {
+      records.add(data);
+    } else if (data is List<String>) {
+      for (String key in data) {
+        record = {"key": key, "value": null};
+        records.add(record);
+      }
+    } else if (data is List<Map>) {
+      records += data;
+    }
+    await response.addRecords(records, origin, failed: failed);
     return response;
   }
 
@@ -150,5 +166,20 @@ class DatabaseHandler {
       }
     });
     return await result;
+  }
+
+  Future<List<Response>> lsEntries(List entryRecords) async {
+    //TODO: Take parameters of number of returns + specific properties to list is specified
+    List<Response> result = List();
+    List<RecordSnapshot> resultRecords;
+    Iterable<String> asdf = entryRecords.skip(0);
+    await this.database.transaction((txn) async {
+      resultRecords = await this.store.records(asdf).getSnapshots(txn);
+    });
+    for (var record in resultRecords) {
+      var recordMap = {'key': record.key, 'value': record.value};
+      result.add(await this.respond(recordMap, 'LS'));
+    }
+    return result;
   }
 }

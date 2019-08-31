@@ -60,9 +60,9 @@ class UpdateDataModel extends Model {
     // TODO: Result stack trace
     Response updateResponse = Response();
 
-    List searchResultData = searchResult.data;
+    List<String> searchResultKeys = searchResult.keys;
     List updateResponseList =
-        await this.databaseHandler.updateEntries(searchResultData, updateData);
+        await this.databaseHandler.updateEntries(searchResultKeys, updateData);
     for (Response response in updateResponseList) {
       updateResponse.joinResponse(response);
     }

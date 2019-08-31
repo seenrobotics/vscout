@@ -2,9 +2,17 @@ import 'dart:io';
 
 class Response<T> {
   int status = HttpStatus.noContent;
-  List data = List();
+  List<Map> data = List();
   var query;
   List origin = List();
+
+  List<String> get keys {
+    List<String> keys = List();
+    for (Map record in this.data) {
+      keys.add(record['key']);
+    }
+    return keys;
+  }
 
   bool statusCheck([var query = false, var origin]) {
     // TODO: Make a proper status check system
@@ -15,12 +23,8 @@ class Response<T> {
     return true;
   }
 
-  addData(var data, var origin, {bool join = false, bool failed = false}) {
-    if (data is List && join == true) {
-      this.data += data;
-    } else {
-      this.data.add(data);
-    }
+  addRecords(List<Map> data, var origin, {bool failed = false}) {
+    this.data += data;
     this.origin.add(origin);
     this.status = failed ? HttpStatus.badRequest : HttpStatus.ok;
     return;
@@ -35,6 +39,7 @@ class Response<T> {
   Map<String, dynamic> readResponse() {
     Map<String, dynamic> responseMap = Map();
     responseMap['status'] = this.status;
+    responseMap['data'] = this.keys;
     responseMap['data'] = this.data;
     responseMap['query'] = this.query;
     responseMap['origin'] = this.origin;
