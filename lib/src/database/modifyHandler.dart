@@ -1,6 +1,7 @@
 import 'package:sembast/sembast.dart';
 
 import 'package:vscout/database.dart' show DatabaseHandler;
+
 /// Database handler object that records changes to the database to allow for syncing and reverting changes.
 class ModifyHandler extends DatabaseHandler {
   List<Filter> filterList = List();

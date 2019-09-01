@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:io';
 
@@ -8,6 +7,7 @@ import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:vscout/transfer.dart';
+
 /// The database handler object that contains database intialization functions.
 abstract class DatabaseHandler {
   Database database;

@@ -7,7 +7,7 @@ import 'package:tuple/tuple.dart';
 import 'package:vscout/transfer.dart';
 import 'package:vscout/database.dart' show DatabaseHandler;
 
-/// The filter handler object that CRUDs dynamic filters to be used to search a database. 
+/// The filter handler object that CRUDs dynamic filters to be used to search a database.
 class FilterHandler extends DatabaseHandler {
   List<Filter> filterList = List();
 
