@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:args/command_runner.dart';
 
 import 'package:vscout/vscout_cli.dart' show VscoutCommand;

@@ -2,7 +2,6 @@ library vscout.main_database_handler;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:sembast/sembast.dart';
 import 'package:tuple/tuple.dart';
@@ -14,12 +13,8 @@ class MainDatabaseHandler extends DatabaseHandler {
   RegExp keysetRegExp = RegExp(r"^KEYS@-?[1234567890]+$", multiLine: false);
 
   List<List<String>> keysetList = List();
-  Map _resultFields = {
-    "status": HttpStatus.processing,
-  };
 
-  static final MainDatabaseHandler _singleton =
-      new MainDatabaseHandler._internal();
+  static final MainDatabaseHandler _singleton = MainDatabaseHandler._internal();
 
   factory MainDatabaseHandler() {
     return _singleton;
@@ -60,7 +55,6 @@ class MainDatabaseHandler extends DatabaseHandler {
 
   Future<Response> updateEntry(String entryRecord, Map updateData) async {
     /// Updates a single record in database.
-    Response response = Response();
     var key;
     await this.database.transaction((txn) async {
       await this.store.record(entryRecord).update(txn, updateData);

@@ -30,7 +30,7 @@ class CliView {
     // Constructors can't call async functions, actual initialization is done in [InitializeDb()].
   }
 
-  CliView._internal() {}
+  CliView._internal();
 
   Future<StreamSubscription> requestInterrupt(String requester) async {
     if (this.inputInterrupt || this.interruptController.hasListener) {

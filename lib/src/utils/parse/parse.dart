@@ -54,8 +54,8 @@ class DuplicateTransformer<S, T> implements StreamTransformer<S, T> {
   // Original Stream
   Stream<S> _stream;
 
-  DuplicateTransformer({bool sync: false, this.cancelOnError}) {
-    _controller = new StreamController<T>(
+  DuplicateTransformer({bool sync = false, this.cancelOnError}) {
+    _controller = StreamController<T>(
         onListen: _onListen,
         onCancel: _onCancel,
         onPause: () {
@@ -66,8 +66,8 @@ class DuplicateTransformer<S, T> implements StreamTransformer<S, T> {
         },
         sync: sync);
   }
-  DuplicateTransformer.broadcast({bool sync: false, bool this.cancelOnError}) {
-    _controller = new StreamController<T>.broadcast(
+  DuplicateTransformer.broadcast({bool sync = false, this.cancelOnError}) {
+    _controller = StreamController<T>.broadcast(
         onListen: _onListen, onCancel: _onCancel, sync: sync);
   }
 

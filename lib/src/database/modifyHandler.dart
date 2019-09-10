@@ -1,12 +1,12 @@
 import 'package:sembast/sembast.dart';
 
 import 'package:vscout/database.dart' show DatabaseHandler;
+
 /// Database handler object that records changes to the database to allow for syncing and reverting changes.
 class ModifyHandler extends DatabaseHandler {
   List<Filter> filterList = List();
 
-  @override
-  static final ModifyHandler _singleton = new ModifyHandler._internal();
+  static final ModifyHandler _singleton = ModifyHandler._internal();
 
   factory ModifyHandler() {
     return _singleton;
@@ -16,7 +16,7 @@ class ModifyHandler extends DatabaseHandler {
 
   addModify(List<String> keyset, String method, {Map data}) async {
     Map<String, dynamic> entry = Map();
-    var key = new DateTime.now().millisecondsSinceEpoch.toString();
+    var key = DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = key;
     entry['method'] = method;
     entry['keyset'] = keyset;

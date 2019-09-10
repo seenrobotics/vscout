@@ -59,6 +59,7 @@ class UpdateDataVM extends ViewModel {
     Response updateResponse = Response();
 
     List<String> searchResultKeys = searchResult.keys;
+    searchResultKeys;
     List updateResponseList = List();
     // await this.databaseHandler.updateEntries(searchResultKeys, updateData);
     for (Response response in updateResponseList) {

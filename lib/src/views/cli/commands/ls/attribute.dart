@@ -1,8 +1,10 @@
 import 'package:args/command_runner.dart';
+import 'package:vscout/src/views/cli/commands/vscout_command.dart';
+import 'package:vscout/view_models.dart';
 
 import 'package:vscout/vscout_cli.dart' show VscoutCommand;
 
-class AttributeCommand extends Command {
+class AttributeCommand extends Command with VscoutCommand {
   @override
   String get name => 'attribute';
 
@@ -11,7 +13,11 @@ class AttributeCommand extends Command {
 
   DataTypeCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
+    this.viewModel = LsDataVM();
   }
+
+  @override
+  handleResponse(data) {}
 
   @override
   run() async {

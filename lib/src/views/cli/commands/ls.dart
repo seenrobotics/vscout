@@ -1,7 +1,5 @@
 import 'package:args/command_runner.dart';
 
-import 'package:vscout/vscout_cli.dart' show VscoutCommand;
-
 import 'ls/attribute.dart';
 import 'ls/data.dart';
 import 'ls/file.dart';

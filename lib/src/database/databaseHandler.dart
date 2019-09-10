@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:vscout/transfer.dart';
+
 /// The database handler object that contains database intialization functions.
 abstract class DatabaseHandler {
   Database database;
@@ -40,7 +41,7 @@ abstract class DatabaseHandler {
   }
 
   Future createDatabaseFile() async {
-    this.databaseFile = new File(this.absoluteDatabasePath);
+    this.databaseFile = File(this.absoluteDatabasePath);
     bool databaseExists = await this.databaseFile.exists();
     databaseExists = databaseExists ? true : await this.createDatabaseFile();
     return (await this.databaseFile.create() is File) ? true : false;
@@ -52,6 +53,7 @@ abstract class DatabaseHandler {
       this.database = await databaseFactoryIo
           .openDatabase(this.absoluteDatabasePath, mode: DatabaseMode.existing);
     } on DatabaseException catch (e) {
+      print(e);
       return false;
     }
     return true;

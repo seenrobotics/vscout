@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:sembast/sembast.dart';
-import '../utils/parse/parse.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:vscout/transfer.dart';
@@ -14,8 +13,7 @@ class FilterHandler extends DatabaseHandler {
   RegExp filterRegExp = RegExp(r"^FIND@-?[1234567890]+$", multiLine: false);
   RegExp filterDBRegExp = RegExp(r"^FIND~-?[1234567890]+$", multiLine: false);
 
-  @override
-  static final FilterHandler _singleton = new FilterHandler._internal();
+  static final FilterHandler _singleton = FilterHandler._internal();
 
   factory FilterHandler() {
     return _singleton;
@@ -77,11 +75,11 @@ class FilterHandler extends DatabaseHandler {
   Future<Filter> filterFromRef(String filterRef) async {
     Filter filter;
     int refIndex = filterRefIndex(filterRef);
-    if (!(refIndex is Null) && (refIndex < filterList.length)) {
+    if (refIndex != null && (refIndex < filterList.length)) {
       filter = filterList[refIndex];
     } else {
       refIndex = filterSavedIndex(filterRef);
-      if (!(refIndex is Null)) {
+      if (refIndex != null) {
         //TODO: check for less than length in filter store
         filter = await filterFromDatabase(refIndex);
       }
@@ -132,7 +130,7 @@ class FilterHandler extends DatabaseHandler {
 
     /// Adds Map entry into database.
     // Get current time to add to entry
-    var now = new DateTime.now().millisecondsSinceEpoch.toString();
+    var now = DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = now;
     // Randomly generate a UUID for the key to avoid collisions in distrubuted Db.
     var key;
@@ -149,7 +147,7 @@ class FilterHandler extends DatabaseHandler {
   Future<Filter> setFilter(Tuple2<String, Filter> filterTuple) async {
     int refIndex = filterRefIndex(filterTuple.item1);
     Filter resultFilter;
-    if (!(refIndex is Null)) {
+    if ((refIndex != null)) {
       if (refIndex == -1) {
         filterList.insert(0, filterTuple.item2);
         resultFilter = filterList[0];
