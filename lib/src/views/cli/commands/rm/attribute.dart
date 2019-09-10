@@ -1,10 +1,11 @@
 import 'package:args/command_runner.dart';
+import 'package:vscout/view_models.dart';
 
 import 'package:vscout/vscout_cli.dart' show VscoutCommand;
 
-import 'package:vscout/view_models.dart' show RemoveAttributeVM;
+import 'package:vscout/view_models.dart' show RmAttributeVM;
 
-class AttributeCommand extends Command {
+class AttributeCommand extends Command with VscoutCommand {
   @override
   String get name => 'data-type';
 
@@ -13,7 +14,11 @@ class AttributeCommand extends Command {
 
   TypeCommand() {
     argParser..addFlag('verbose', defaultsTo: false);
+    this.viewModel = RmAttributeVM();
   }
+
+  @override
+  handleResponse(data) {}
 
   @override
   run() async {

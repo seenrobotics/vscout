@@ -1,11 +1,8 @@
 library vscout.tool;
 
-import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:io/ansi.dart';
 
 import 'package:vscout/src/views/cli/view.dart';
 import 'package:vscout/src/views/cliLogo.dart' as logo;
@@ -14,9 +11,7 @@ import 'package:vscout/vscout_cli.dart';
 import 'package:yaml/yaml.dart';
 import 'package:path/path.dart';
 import 'package:vscout/src/database/filterHandler.dart';
-import 'package:yaml/yaml.dart';
 
-import 'package:vscout/vscout_cli.dart';
 import 'package:vscout/database.dart';
 
 // The exit code for a general error.
@@ -30,6 +25,7 @@ main(List<String> args) async {
   var config = loadYaml(configFile.readAsStringSync());
 
   List<dynamic> runCommands = List();
+  runCommands;
   // Create a new database handler with empty constructor.
   // Run all constructor functions in async function to await database construction completion.
   //  This is to prevent calls to an unfinished database object.

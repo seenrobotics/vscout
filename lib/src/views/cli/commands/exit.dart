@@ -1,8 +1,6 @@
 import 'package:args/command_runner.dart';
 
-import 'package:vscout/vscout_cli.dart' show VscoutCommand;
 import 'package:vscout/src/views/cli/view.dart';
-import 'dart:io';
 
 class ExitCommand extends Command {
   @override

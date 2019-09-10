@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:args/command_runner.dart';
 
-import 'package:vscout/vscout_cli.dart' show VscoutCommand;
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:vscout/src/views/cli/view.dart';
 import 'dart:async';
 import 'package:safe_config/safe_config.dart';
-import 'dart:mirrors';
 import 'package:yaml/yaml.dart';
 import 'package:vscout/src/database/mainDatabaseHandler.dart';
 
@@ -70,7 +66,7 @@ class InitCommand extends Command {
     await MainDatabaseHandler().setStore(storeName: config["main_store"]);
 
     if (await configFile.exists()) {
-      var config = new ApplicationConfiguration(this.absoluteConfigFilePath);
+      var config = ApplicationConfiguration(this.absoluteConfigFilePath);
       print("${config.database_location}");
       print(
           "Error! [${this.absoluteConfigFilePath}] already exists. Try running [vscout-exec config] instead.");
@@ -102,8 +98,8 @@ description: config settings for vscout
           this.initStage++;
         } else if (this.initStage == 1) {
           String mainStoreName = await mainStoreQuery.handleQuery(data[0]);
-
-          this.cliView.concludeInterrupt(this.name);
+          mainStoreName;
+          await this.cliView.concludeInterrupt(this.name);
         }
       });
     }

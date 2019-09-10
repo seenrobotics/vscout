@@ -19,7 +19,7 @@ class FileCommand extends Command with VscoutCommand {
   void handleResponse(data) {}
   @override
   run() async {
-    final FindDataVM addDataModel = new FindDataVM();
+    final FindDataVM addDataModel = FindDataVM();
     this.results = await addDataModel.findFileData(argResults.rest[0]);
     print('Entries found \n \n');
     return this.printResponse(argResults['verbose']);
