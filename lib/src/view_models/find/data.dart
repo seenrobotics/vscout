@@ -1,8 +1,6 @@
 part of vscout.view_models;
 
 class FindDataVM extends ViewModel {
-  FilterHandler queryDBHandler = FilterHandler();
-
   @override
   void handleInputData(input) async {
     // TODO: Instead of using a Map as the data, create a QUERY object similar to RESPONSE that is holds parameters and data
@@ -25,7 +23,7 @@ class FindDataVM extends ViewModel {
   Future<Response> findData(var data) async {
     // this.result = await this.databaseHandler.findEntries(dataEntry);
     // this.result.statusCheck(dataEntry, 'FIND/DATA/MAP');
-    // return this.result;
+    return this.result;
   }
 
   Future<Response> findFileData(String relativeFilePath) async {
@@ -33,7 +31,7 @@ class FindDataVM extends ViewModel {
     //  Tries to find file in [files] folder.
     var absFilePath =
         ("${dirname(Platform.script.toFilePath()).toString()}$fileFolder$relativeFilePath");
-    final inputFile = new File(absFilePath);
+    final inputFile = File(absFilePath);
     String fileContents;
     fileContents = await inputFile.readAsString();
     //  Decode file contents as JSON.

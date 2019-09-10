@@ -1,39 +1,25 @@
-import './mainDatabaseHandler.dart';
-
 import 'dart:async';
-import 'dart:io';
 
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
-import 'package:path/path.dart';
-import 'package:uuid/uuid.dart';
-import '../utils/parse/parse.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:vscout/transfer.dart';
-import './databaseHandler.dart';
+import 'package:vscout/database.dart' show DatabaseHandler;
 
+/// The filter handler object that CRUDs dynamic filters to be used to search a database.
 class FilterHandler extends DatabaseHandler {
   List<Filter> filterList = List();
 
-  RegExp queryRegExp = RegExp(r"^QUERY~-?[1234567890]+$", multiLine: false);
   RegExp filterRegExp = RegExp(r"^FIND@-?[1234567890]+$", multiLine: false);
   RegExp filterDBRegExp = RegExp(r"^FIND~-?[1234567890]+$", multiLine: false);
 
-  Future initialize2() {}
-
-  Map _resultFields = {
-    "status": HttpStatus.processing,
-  };
-
-  @override
-  static final FilterHandler _singleton = new FilterHandler._internal();
+  static final FilterHandler _singleton = FilterHandler._internal();
 
   factory FilterHandler() {
     return _singleton;
   }
   @override
-  FilterHandler._internal() {}
+  FilterHandler._internal();
 
   Future<Response> respond<T>(data, origin,
       {bool failed = false, bool join = false, String dataType = 'key'}) async {
@@ -56,46 +42,6 @@ class FilterHandler extends DatabaseHandler {
     }
     await response.addRecords(records, origin, failed: failed);
     return response;
-  }
-
-  newFinder() async {}
-  Future<Map> queryToMap(String query) async {
-    int queryRef =
-        int.parse(queryRegExp.stringMatch(query).toString().substring(6));
-    var result =
-        ((await this.findQuery(queryRef)).data[0]['value']['parameters']);
-    while (result is String && queryRegExp.hasMatch(result)) {
-      queryRef +=
-          int.parse(queryRegExp.stringMatch(result).toString().substring(6));
-      result =
-          ((await this.findQuery(queryRef)).data[0]['value']['parameters']);
-    }
-    return result;
-  }
-
-  Future parseToMap(var data) async {
-    if (data is Null || data.isEmpty) {
-      return Map();
-    }
-    if (data is Map) {
-      return data;
-    }
-    if (queryRegExp.hasMatch(data)) {
-      int queryRef =
-          int.parse(queryRegExp.stringMatch(data).toString().substring(6));
-      // var result = ((await this.findQuery(queryRef)).data[0]['value']['parameters']);
-      // while(result is String && queryRegExp.hasMatch(result)){
-      //   queryRef += int.parse(queryRegExp.stringMatch(result).toString().substring(6));
-      //   result = ((await this.findQuery(queryRef)).data[0]['value']['parameters']);
-      // }
-      return filterList[queryRef];
-    } else {
-      List<Filter> filters = List();
-      parseArgsJson(data).forEach((k, v) => filters.add(Filter.matches(k, v)));
-      Filter finder = Filter.and(filters);
-      List<String> records;
-      return (finder);
-    }
   }
 
   int filterRefIndex(String filterRef) {
@@ -129,11 +75,11 @@ class FilterHandler extends DatabaseHandler {
   Future<Filter> filterFromRef(String filterRef) async {
     Filter filter;
     int refIndex = filterRefIndex(filterRef);
-    if (!(refIndex is Null) && (refIndex < filterList.length)) {
+    if (refIndex != null && (refIndex < filterList.length)) {
       filter = filterList[refIndex];
     } else {
       refIndex = filterSavedIndex(filterRef);
-      if (!(refIndex is Null)) {
+      if (refIndex != null) {
         //TODO: check for less than length in filter store
         filter = await filterFromDatabase(refIndex);
       }
@@ -184,7 +130,7 @@ class FilterHandler extends DatabaseHandler {
 
     /// Adds Map entry into database.
     // Get current time to add to entry
-    var now = new DateTime.now().millisecondsSinceEpoch.toString();
+    var now = DateTime.now().millisecondsSinceEpoch.toString();
     entry['time'] = now;
     // Randomly generate a UUID for the key to avoid collisions in distrubuted Db.
     var key;
@@ -193,7 +139,7 @@ class FilterHandler extends DatabaseHandler {
     });
 
     Response response = Response();
-    Map map = {"filter": filter};
+    Map map = {"filter": filter, "key": key};
     response.addRecords([map], 'SAVE/FILTER');
     return response;
   }
@@ -201,7 +147,7 @@ class FilterHandler extends DatabaseHandler {
   Future<Filter> setFilter(Tuple2<String, Filter> filterTuple) async {
     int refIndex = filterRefIndex(filterTuple.item1);
     Filter resultFilter;
-    if (!(refIndex is Null)) {
+    if ((refIndex != null)) {
       if (refIndex == -1) {
         filterList.insert(0, filterTuple.item2);
         resultFilter = filterList[0];
@@ -256,56 +202,5 @@ class FilterHandler extends DatabaseHandler {
     Map map = {"filter": resultFilter};
     response.addRecords([map], 'SET/FILTER');
     return response;
-  }
-
-  Future handleRequest(Request request) async {
-    request.realParameters = await this.parseToMap(request.queryParameters);
-    request.realData = await this.parseToMap(request.queryData);
-    await this.addQuery(request);
-    return request;
-  }
-
-  Future<Response> addQuery(Request request) async {
-    List<Filter> filters = List();
-    request.response.keys
-        .forEach((element) => filters.add(Filter.byKey(element)));
-    List<String> records;
-    Filter finder = Filter.or(filters);
-    this.filterList.insert(0, finder);
-
-    Map<String, dynamic> entry = Map();
-    entry['parameters'] = request.realParameters;
-    entry['data'] = request.realData;
-
-    /// Adds Map entry into database.
-    // Get current time to add to entry
-    var now = new DateTime.now().millisecondsSinceEpoch.toString();
-    entry['time'] = now;
-    // Randomly generate a UUID for the key to avoid collisions in distrubuted Db.
-    var key;
-    await this.database.transaction((txn) async {
-      key = await this.store.add(txn, entry);
-    });
-    return this.respond(key, 'ADD');
-  }
-
-  Future<Response> findQuery(int queryIndex) async {
-    List records;
-    await this.database.transaction((txn) async {
-      var count = await this.store.count(txn);
-      Finder finder = Finder(offset: count - queryIndex - 1);
-      records = [await this.store.findFirst(txn, finder: finder)];
-    });
-    List<Response> result = List();
-    for (var record in records) {
-      var recordMap = {'key': record.key, 'value': record.value};
-      result.add(await this.respond(recordMap, 'LS'));
-    }
-    Response lsResponse = Response();
-
-    for (Response response in result) {
-      lsResponse.joinResponse(response);
-    }
-    return lsResponse;
   }
 }

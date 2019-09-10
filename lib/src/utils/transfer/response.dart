@@ -1,5 +1,7 @@
 import 'dart:io';
 
+/// Data carrying object that allows for dynamic data types and indexes to be passed while
+/// using a consistent data transfer method.
 class Response<T> {
   int status = HttpStatus.noContent;
   List<Map> data = List();

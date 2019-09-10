@@ -42,7 +42,7 @@ class AddDataVM extends ViewModel {
     //  Tries to find file in [files] folder.
     var absFilePath =
         ("${dirname(Platform.script.toFilePath()).toString()}$fileFolder$relativeFilePath");
-    final inputFile = new File(absFilePath);
+    final inputFile = File(absFilePath);
     String fileContents;
     fileContents = await inputFile.readAsString();
     //  Decode file contents as JSON.
