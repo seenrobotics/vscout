@@ -2,6 +2,7 @@ name: vscout
 description: Scouting software for robotics competitions.
 authors: [Sean D'Souza <seangdsouza@gmail.com>, Jeffrey Li <dr.cheddar@outlook.com>]
 homepage: https://vscout.readthedocs.io/
+version: 0.0.1
 
 environment:
   sdk: '>=2.4.0 <3.0.0'
@@ -14,13 +15,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  flutter_statusbarcolor: any
+  flutter_statusbarcolor: ^0.2.1
   provider: ^3.0.0
   dynamic_theme: ^1.0.0
   flutter_svg: ^0.14.0
-
-
-dev_dependencies:
   pedantic: ^1.7.0
   sembast: ^2.0.1+2
   path: ^1.6.2
@@ -29,10 +27,15 @@ dev_dependencies:
   built_value: ^6.7.0
   build_runner: ^1.0.0
   build_web_compilers: ^0.4.0
+  io: ^0.3.3
   uuid: ^2.0.2
   safe_config: ^2.0.2
   yaml: ^2.1.16 
   tuple: ^1.0.2
+  args: ^1.5.2
+
+
+dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_driver:

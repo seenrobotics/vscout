@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:args/command_runner.dart';
 import 'package:io/ansi.dart';
+import 'package:args/command_runner.dart';
 
 import 'package:vscout/src/utils/utils.dart';
 

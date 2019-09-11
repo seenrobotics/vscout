@@ -21,7 +21,7 @@ String validate_string_length_team(dynamic value) {
 String validate_phone_number(String value) {
   // ITU-T E.123 compliant RegEx.
   Pattern pattern = r'^\+(?:[0-9]●?){6,14}[0-9]$';
-  RegExp regex = new RegExp(pattern);
+  RegExp regex = RegExp(pattern);
   if (!regex.hasMatch(value)) {
     return 'Enter Valid Email';
   } else {
@@ -32,7 +32,7 @@ String validate_phone_number(String value) {
 String validate_email(String value) {
   Pattern pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regex = new RegExp(pattern);
+  RegExp regex = RegExp(pattern);
   if (!regex.hasMatch(value)) {
     return 'Enter Valid Email';
   } else {
